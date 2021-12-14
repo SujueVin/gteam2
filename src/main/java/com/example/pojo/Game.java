@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
  * @since 2021-12-13
  */
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="Game对象", description="游戏表")
 public class Game implements Serializable {

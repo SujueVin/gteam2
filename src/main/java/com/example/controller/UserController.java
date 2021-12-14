@@ -1,7 +1,10 @@
 package com.example.controller;
 
 
+import com.example.pojo.Game;
 import com.example.pojo.User;
+import com.example.util.Result;
+import com.example.util.ResultCode;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,52 +18,29 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    //注册用户
- /*   @RequestMapping(value="/getUserById/{id}", method = RequestMethod.POST)
-    @ResponseBody
-    public ResultModel insertBasicUser(BasicUser basicUser) {
-        int row = basicUserService.insert(basicUser);
-        if(row > 0) {
-            return new ResultModel(201, row, "新增成功");
-        }
-        return new ResultModel(200, row, "新增失败");
-    }*/
 
     //查询用户
-    @RequestMapping(value = "/getUserById/{username}", method = RequestMethod.GET)
-    @ResponseBody
-    public User getUserById(@PathVariable("username") int userid){
-        //System.out.println("yesyes");
+    @GetMapping("/getUserById/{userid}")
+    public Result getUserById(@PathVariable("userid") int userid){
         User user = new User();
         user.setId(1);
         user.setUsername("666");
         //这里需要使用service层查询数据库内对象，然后返回
-        return user;//没有查到，返回空对象user对应的json数据
+        if (userid==2){//能够查到，进行返回
+            return Result.success(user);
+        }
+        return Result.fail(ResultCode.PARAM_IS_INVALID);//没有查到，返回空对象user对应的json数据
     }
 
     //用户更新数据
-    @RequestMapping(value="/{id}", method = RequestMethod.PUT)
-    @ResponseBody
-    public String updateById(@PathVariable("id")Integer id, String userName) {
-//        BasicUser basicUser = new BasicUser();
-//        basicUser.setId(id);
-//        basicUser.setRealname(realname);
-//        int row = basicUserService.updateById(basicUser);
-//        if(row > 0) {
-//            return new ResultModel(201, row, "更新成功");
-//        }
-        System.out.println("更新用户数据成功id="+id+userName);
-        return "200";
+    @PutMapping("/{id}")
+    public Result updateById(@PathVariable("id")Integer id, String userName) {
+
+        Game game =new Game();
+        game.setId(2);
+        game.setDesc("a123");
+
+        return Result.success(game);
     }
-    //删除用户
-    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public String deleteById(@PathVariable("id")Integer id) {
-        //int row = basicUserService.deleteById(id);
-//        if(row > 0) {
-//            return "200";
-//        }
-        System.out.println("删除id"+id);
-        return "404";
-    }
+
 }
