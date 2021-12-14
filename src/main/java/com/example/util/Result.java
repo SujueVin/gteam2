@@ -1,7 +1,6 @@
 package com.example.util;
 
 import lombok.Data;
-
 import java.io.Serializable;
 
 
@@ -19,6 +18,12 @@ public class Result<T> implements Serializable{
     private boolean success;
 
     /**
+     * 时间戳
+     */
+    private long timestamp = System.currentTimeMillis();
+
+
+    /**
      * 描述
      */
     private String message;
@@ -27,12 +32,6 @@ public class Result<T> implements Serializable{
      * 返回代码
      */
     private Integer code;
-
-    /**
-     * 时间戳
-     */
-    private long timestamp = System.currentTimeMillis();
-
     /**
      * 结果对象
      */
@@ -41,6 +40,37 @@ public class Result<T> implements Serializable{
 
     //下面是相应的静态方法
 
-    //返回成功
+    //请求成功返回，不需要返回数据
+    public static Result success(){
+        Result result=new Result();
+
+        result.success=true;
+        result.code=ResultCode.SUCCESS.code();
+        result.message=ResultCode.SUCCESS.message();
+
+        return result;
+    }
+
+    //请求成功返回，需要返回数据,从参数返回
+    public static Result success(Object data){
+        Result result=new Result();
+
+        result.success=true;
+        result.code=ResultCode.SUCCESS.code();
+        result.message=ResultCode.SUCCESS.message();
+        result.data=data;
+
+        return result;
+    }
+    //请求失败返回，返回的错误类型从参数输入
+    public static Result fail(ResultCode resultCode){
+        Result result=new Result();
+
+        result.success=false;
+        result.code=resultCode.code();
+        result.message=resultCode.message();
+
+        return result;
+    }
 
 }

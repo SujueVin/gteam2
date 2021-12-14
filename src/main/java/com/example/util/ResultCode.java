@@ -1,5 +1,6 @@
 package com.example.util;
 
+
 public enum ResultCode {
     SUCCESS(200,"成功"),
     PARAM_IS_INVALID(201,"参数不正确");
@@ -13,7 +14,7 @@ public enum ResultCode {
     }
 
 
-    public Integer mode() {
+    public Integer code() {
         return this.code;
     }
 
