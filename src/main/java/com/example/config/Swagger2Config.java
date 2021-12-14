@@ -1,4 +1,4 @@
-package com.example;
+package com.example.config;
 
 
 import org.springframework.context.annotation.Bean;
@@ -26,13 +26,13 @@ public class Swagger2Config {
     public Docket createAPI() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
+                .groupName("默认接口")
                 .select()
                 //指定哪个包下面生成接口文档
                 .apis(RequestHandlerSelectors.basePackage("com.example.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
-
 
     /**
      * 文档基本信息
@@ -41,11 +41,10 @@ public class Swagger2Config {
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .version("1.0")
                 .title("gteam2接口文档")
-                .description("gteam2接口文档")
+                .description("gteam2 RESTful APIs")
                 .contact(new Contact("sujue", "http://localhost:8080", "xxx@xxx.com"))
+                .version("1.0")
                 .build();
-
     }
 }

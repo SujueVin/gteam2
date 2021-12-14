@@ -25,9 +25,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 			<!-- 初始化连接数 -->
 			<property name="initialSize" value="5"/>
 	</bean>
-
-	
- <!-- 添加事务支持 -->
+	<!-- 添加事务支持 -->
    <bean id="txManager"   
         class="org.springframework.jdbc.datasource.DataSourceTransactionManager">   
         <property name="dataSource" ref="dataSource" />   
