@@ -22,7 +22,7 @@ public class MailUtils {
         JavaMailSender sender = getJavaMailSender();
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-        helper.setFrom(MailConfig.USERNAME);
+        helper.setFrom(MailConstants.USERNAME);
         helper.setTo(to);
         helper.setSubject("注册邮件");
         helper.setSentDate(new Date());
@@ -30,15 +30,15 @@ public class MailUtils {
         sender.send(message);
     }
 
-    private static JavaMailSender getJavaMailSender(){
+
+    public static JavaMailSender getJavaMailSender(){
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setHost(MailConfig.HOST);
-        sender.setProtocol(MailConfig.PROTOCOL);
-        sender.setPort(MailConfig.PORT);
-        sender.setDefaultEncoding(MailConfig.ENCODING);
-        sender.setUsername(MailConfig.USERNAME);
-        sender.setPassword(MailConfig.PASSWORD);
+        sender.setHost(MailConstants.HOST);
+        sender.setProtocol(MailConstants.PROTOCOL);
+        sender.setPort(MailConstants.PORT);
+        sender.setDefaultEncoding(MailConstants.ENCODING);
+        sender.setUsername(MailConstants.USERNAME);
+        sender.setPassword(MailConstants.PASSWORD);
         return sender;
     }
-
 }

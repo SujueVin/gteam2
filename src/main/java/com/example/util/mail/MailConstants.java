@@ -7,7 +7,8 @@ package com.example.util.mail;
  * @Version 1.0
  * @Author HJW
  */
-public class MailConfig {
+
+public class MailConstants {
     /**
      * 发送邮件的主机种类
      */
@@ -22,4 +23,5 @@ public class MailConfig {
     static String USERNAME = "xv901925@163.com";    //发件人
     static String PASSWORD = "UNWRVIXLOPNYMEYH";    //授权码
     static int PORT = 25;  //服务器端口号
+
 }
