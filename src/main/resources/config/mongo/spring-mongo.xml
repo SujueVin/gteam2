@@ -10,7 +10,7 @@
           https://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/context
           https://www.springframework.org/schema/context/spring-context.xsd">
-    <context:property-placeholder location="classpath:config/mongo.properties"></context:property-placeholder>
+    <context:property-placeholder location="classpath:config/mongo/mongo.properties"></context:property-placeholder>
     <mongo:mongo-client id="mongoClient" host="${mongo.host}" port="${mongo.port}">
         <mongo:client-settings connection-pool-max-connection-life-time="10"
                                connection-pool-min-size="10"
@@ -20,8 +20,11 @@
                                connection-pool-max-connection-idle-time="30"
                                connection-pool-max-wait-time="15" />
     </mongo:mongo-client>
-    <mongo:db-factory id="mongoDbFactory" dbname="test" mongo-client-ref="mongoClient"/>
+    <mongo:db-factory id="mongoDbFactory" dbname="${mongo.database}" mongo-client-ref="mongoClient"/>
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
     </bean>
+
+    <!-- mongodb bean的仓库目录，会自动扫描扩展了MongoRepository接口的接口进行注入 -->
+    <mongo:repositories base-package="com.example.mongo.dao" />
 </beans>
