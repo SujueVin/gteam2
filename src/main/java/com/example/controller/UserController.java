@@ -1,7 +1,6 @@
 package com.example.controller;
 
 
-import com.example.pojo.Game;
 import com.example.pojo.User;
 import com.example.util.Result;
 import com.example.util.ResultCode;
@@ -15,13 +14,16 @@ import org.springframework.web.bind.annotation.*;
  * @author su_jue
  * @since 2021-12-13
  */
+
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    //查询用户
-    @GetMapping("/getUserById/{userid}")
-    public Result getUserById(@PathVariable("userid") int userid){
+    //查询用户详细信息，登录后可以查询自己的信息
+    //不需要返回整个user对象，只返回非隐私的数据
+    @GetMapping("/detail")
+    public Result getUserById(int userid){
         User user = new User();
         user.setId(1);
         user.setUsername("666");
@@ -29,18 +31,20 @@ public class UserController {
         if (userid==2){//能够查到，进行返回
             return Result.success(user);
         }
-        return Result.fail(ResultCode.PARAM_IS_INVALID);//没有查到，返回空对象user对应的json数据
+        return Result.error(ResultCode.PARAM_IS_INVALID);//没有查到，返回空对象user对应的json数据
     }
 
-    //用户更新数据
-    @PutMapping("/{id}")
-    public Result updateById(@PathVariable("id")Integer id, String userName) {
-
-        Game game =new Game();
-        game.setId(2);
-        game.setDesc("a123");
-
-        return Result.success(game);
+    //用户更新数据,只能更新自己的数据，接收user变量？
+    //user变量好像失败了，为什么不能传入自定义数据？
+    @PutMapping("/update")
+    public Result updateById(User user) {
+        //接收到数据之后，直接将值赋值给数据库
+        //要求前端必须保证user类的完整性。
+        //但是user类中有需要屏蔽的信息——比如password
+        //salt保存在用户表内，但是用户更改数据的时候不需要更改
+        //需要一个中介类，或者直接让他们传入各个参数
+        System.out.println(user.getEmail());
+        return Result.success(user);
     }
 
 }

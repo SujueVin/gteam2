@@ -63,7 +63,7 @@ public class Result<T> implements Serializable{
         return result;
     }
     //请求失败返回，返回的错误类型从参数输入
-    public static Result fail(ResultCode resultCode){
+    public static Result error(ResultCode resultCode){
         Result result=new Result();
 
         result.success=false;
