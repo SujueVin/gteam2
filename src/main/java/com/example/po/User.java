@@ -1,4 +1,4 @@
-package com.example.pojo;
+package com.example.po;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -49,6 +49,7 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "用户状态，0为正常，1为未验证，2为受限，3为删除")
     private Integer stat;
+
 
 
 }

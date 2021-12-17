@@ -1,10 +1,19 @@
 package com.example.controller;
 
 
-import com.example.pojo.User;
+import com.example.po.Game;
+import com.example.po.User;
+import com.example.pojo.UUser;
+import com.example.service.impl.UserServiceImpl;
+import com.example.util.CommonUtils;
 import com.example.util.Result;
 import com.example.util.ResultCode;
+import com.example.util.mail.MailUtils;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -14,11 +23,11 @@ import org.springframework.web.bind.annotation.*;
  * @author su_jue
  * @since 2021-12-13
  */
-
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
+    private UserServiceImpl userService;
 
     //查询用户详细信息，登录后可以查询自己的信息
     //不需要返回整个user对象，只返回非隐私的数据
@@ -47,4 +56,48 @@ public class UserController {
         return Result.success(user);
     }
 
+    /**
+     * 注册
+     * @param user
+     * @return
+     */
+    @PostMapping("/register")
+    @ApiOperation(value = "注册用户", tags = "提交表单注册用户")
+    public Result register(@RequestBody User user){
+        user.setStat(1);
+        user.setCtime(LocalDateTime.now());
+        user.setNickname(user.getEmail());
+        UUser uUser = new UUser();
+        uUser.setUser(user);
+        uUser.setUuid(CommonUtils.getUUID());
+        System.out.println(uUser.getUuid());
+        try {
+            userService.addUserToMongo(uUser);
+            MailUtils.sendMail(user.getEmail(),uUser.getUuid());
+        }catch (Exception e){
+            return Result.fail(ResultCode.PARAM_IS_INVALID);
+        }
+        return Result.success();
+    }
+
+    /**
+     * 邮箱激活注册
+     * @param code
+     * @return
+     */
+    @GetMapping("checkRegister/{code}")
+    @ApiOperation(value = "邮箱验证",tags = "点击按钮完成注册激活")
+    public Result checkRegister(@PathVariable String code){
+        System.out.println(code);
+        UUser uUser = userService.findUUser(code);
+        User user = uUser.getUser();
+        user.setStat(0);
+        try {
+            userService.addUser(user);
+            userService.delUUser(code);
+        }catch (Exception e){
+            return Result.fail(ResultCode.PARAM_IS_INVALID);
+        }
+        return Result.success();
+    }
 }
