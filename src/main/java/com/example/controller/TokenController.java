@@ -1,7 +1,7 @@
 package com.example.controller;
 
 
-import com.example.pojo.User;
+
 import com.example.util.Result;
 import com.example.util.ResultCode;
 import org.springframework.web.bind.annotation.PostMapping;

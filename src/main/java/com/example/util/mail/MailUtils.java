@@ -28,7 +28,7 @@ public class MailUtils {
         helper.setSubject("账号激活");
         helper.setSentDate(new Date());
         String content = "<h1>这是一封激活邮件</h1>" +
-                "<h3><a href=\"http://localhost:8080/checkRegister/" +
+                "<h3><a href=\"http://127.0.0.1:8080/user/checkRegister/" +
                 code + "\">账号激活</a></h3>";
         helper.setText(content, true);
         sender.send(message);

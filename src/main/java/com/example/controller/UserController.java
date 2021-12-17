@@ -1,7 +1,6 @@
 package com.example.controller;
 
 
-import com.example.po.Game;
 import com.example.po.User;
 import com.example.pojo.UUser;
 import com.example.service.impl.UserServiceImpl;
@@ -75,7 +74,7 @@ public class UserController {
             userService.addUserToMongo(uUser);
             MailUtils.sendMail(user.getEmail(),uUser.getUuid());
         }catch (Exception e){
-            return Result.fail(ResultCode.PARAM_IS_INVALID);
+            return Result.error(ResultCode.PARAM_IS_INVALID);
         }
         return Result.success();
     }
@@ -96,7 +95,7 @@ public class UserController {
             userService.addUser(user);
             userService.delUUser(code);
         }catch (Exception e){
-            return Result.fail(ResultCode.PARAM_IS_INVALID);
+            return Result.error(ResultCode.PARAM_IS_INVALID);
         }
         return Result.success();
     }
