@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/token")
@@ -22,7 +21,6 @@ public class TokenController {
 
     //获取accesstoken接口
     //参数需要：一个refreshtoken
-
     @PostMapping("")
     public Result token() throws InvalidJwtException, MalformedClaimException, JoseException {
 
