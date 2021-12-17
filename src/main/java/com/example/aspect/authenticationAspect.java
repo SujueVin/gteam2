@@ -1,9 +1,8 @@
 package com.example.aspect;
 
-import com.example.Exception.NeedLoginException;
-import com.example.Exception.TokenLoginException;
 import com.example.util.HttpContextUtil;
-import com.example.util.TokenConstant;
+import com.example.util.token.TokenConstant;
+import com.example.util.token.TokenUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,25 +24,12 @@ public class authenticationAspect {
     public Object around(ProceedingJoinPoint point) throws Throwable {
         //long beginTime = System.currentTimeMillis();
 
+        //这里只需要进行accessToken的鉴权，因为资源访问不需要访问refreshToken
+
         // 从 request header 中获取当前 token
         String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
-        //检验accesstoken是否过期，是就抛出异常，告知前端使用refreshtoken获取新token
-        if (false){
-            throw new TokenLoginException("accesstoken过期，需要刷新token");
-        }
-
-        //检验refreshtoken是否过期
-        String refreshToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.REFRESH_TOKEN_NAME);
-        //如果过期，将db表中对应uid项删除，返回没有权限，需要重新登录
-
-        if (false){
-            throw new NeedLoginException("refreshtoken过期，需要重新登录");
-        }
-
-        //如果没有过期，和db中对应uid项的token对比，如果不是同一个，返回没有权限，需要重新登录
-        if (false){
-            throw new NeedLoginException("不是同一个token，可能被盗号");
-        }
+        //检验accesstoken是否过期，是的话util类将会自动抛出异常
+        TokenUtil.checkJwt(accessToken, TokenConstant.tokenType.ACCESS_TOKEN);
 
         //执行方法
         Object result = point.proceed();

@@ -1,7 +1,5 @@
 package com.example.annotation;
 
-import org.aspectj.lang.annotation.Aspect;
-
 import java.lang.annotation.*;
 
 

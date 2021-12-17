@@ -1,4 +1,4 @@
-package com.example.util;
+package com.example.util.Result;
 
 
 public enum ResultCode {
@@ -15,7 +15,6 @@ public enum ResultCode {
         this.code = code;
         this.message = message;
     }
-
 
     public Integer code() {
         return this.code;

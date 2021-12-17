@@ -1,4 +1,4 @@
-package com.example.util;
+package com.example.util.Result;
 
 import lombok.Data;
 import java.io.Serializable;
@@ -41,6 +41,7 @@ public class Result<T> implements Serializable{
     //下面是相应的静态方法
 
     //请求成功返回，不需要返回数据
+    //由于枚举类型化为json格式将会只有名字，很奇怪，因此必须拆开
     public static Result success(){
         Result result=new Result();
 

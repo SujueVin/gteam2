@@ -1,9 +1,9 @@
 package com.example.controller;
 
 
-import com.example.pojo.User;
-import com.example.util.Result;
-import com.example.util.ResultCode;
+import com.example.po.User;
+import com.example.util.Result.Result;
+import com.example.util.Result.ResultCode;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
