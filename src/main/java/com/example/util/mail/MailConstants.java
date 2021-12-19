@@ -17,11 +17,6 @@ public class MailConstants {
     /**
      * 基础配置
      */
-    static String HOST = WY_HOST;
-    static String PROTOCOL = "smtp";    //使用的传输协议
-    static String ENCODING = "UTF-8";   //编码格式
     static String USERNAME = "xv901925@163.com";    //发件人
-    static String PASSWORD = "UNWRVIXLOPNYMEYH";    //授权码
-    static int PORT = 25;  //服务器端口号
 
 }

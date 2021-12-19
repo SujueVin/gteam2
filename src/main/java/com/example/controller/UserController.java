@@ -2,6 +2,7 @@ package com.example.controller;
 
 
 import com.example.po.User;
+import com.example.pojo.RegisterParam;
 import com.example.pojo.UUser;
 import com.example.service.impl.UserServiceImpl;
 import com.example.util.CommonUtils;
@@ -57,43 +58,39 @@ public class UserController {
 
     /**
      * 注册
-     * @param user
      * @return
      */
     @PostMapping("/register")
     @ApiOperation(value = "注册用户", tags = "提交表单注册用户")
-    public Result register(@RequestBody User user){
-        user.setStat(1);
-        user.setCtime(LocalDateTime.now());
-        user.setNickname(user.getEmail());
-        UUser uUser = new UUser();
-        uUser.setUser(user);
-        uUser.setUuid(CommonUtils.getUUID());
-        System.out.println(uUser.getUuid());
+    public Result register(@RequestBody RegisterParam registerParam){
         try {
-            userService.addUserToMongo(uUser);
-            MailUtils.sendMail(user.getEmail(),uUser.getUuid());
+            userService.findUUser(registerParam.getCode());
+            User user = new User();
+            user.setUsername(registerParam.getUsername());
+            user.setPassword(registerParam.getPassword());
+            user.setEmail(registerParam.getEmail());
+            user.setStat(1);
+            user.setCtime(LocalDateTime.now());
+            user.setNickname(user.getEmail());
+            userService.addUser(user);
         }catch (Exception e){
             return Result.error(ResultCode.PARAM_IS_INVALID);
         }
         return Result.success();
     }
 
-    /**
-     * 邮箱激活注册
-     * @param code
-     * @return
-     */
-    @GetMapping("checkRegister/{code}")
-    @ApiOperation(value = "邮箱验证",tags = "点击按钮完成注册激活")
-    public Result checkRegister(@PathVariable String code){
-        System.out.println(code);
-        UUser uUser = userService.findUUser(code);
-        User user = uUser.getUser();
-        user.setStat(0);
+
+    @GetMapping("/captcha/{email}")
+    @ApiOperation(value = "邮箱验证码",tags = "发送邮箱验证码")
+    public Result checkRegister(@PathVariable String email){
+        String code = "1234";
+        UUser uUser = new UUser();
+        uUser.setCode(code);
+        uUser.setEmail(email);
         try {
-            userService.addUser(user);
-            userService.delUUser(code);
+            userService.addUserToMongo(uUser);
+            MailUtils sendMail = new MailUtils();
+            sendMail.sendMail(email,code);
         }catch (Exception e){
             return Result.error(ResultCode.PARAM_IS_INVALID);
         }

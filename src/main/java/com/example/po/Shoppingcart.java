@@ -1,7 +1,5 @@
 package com.example.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 游戏种类表
+ * 
  * </p>
  *
  * @author su_jue
@@ -18,17 +16,24 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Kind对象", description="游戏种类表")
-public class Kind implements Serializable {
+@ApiModel(value="Shoppingcart对象", description="")
+public class Shoppingcart implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "种类ID")
-    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty(value = "种类名字")
-    private String name;
+    private Integer gameprice;
+
+    private String gamename;
+
+    private Long gameid;
+
+    private Double discount;
+
+    private Double price;
+
+    private String capsuleimage;
 
 
 }
