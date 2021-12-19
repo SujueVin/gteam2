@@ -1,0 +1,14 @@
+package com.example.dao;
+
+
+/**
+ * <p>
+ * 游戏推荐表，人工设定 Mapper 接口
+ * </p>
+ *
+ * @author su_jue
+ * @since 2021-12-19
+ */
+public interface RecommendMapper {
+
+}
