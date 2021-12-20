@@ -47,11 +47,11 @@ public class TokenUtil {
     }
 
     //这个方法生成accessToken
-    public static String accessTokenSign(String Audience) throws JoseException, MalformedClaimException {
+    public static String accessTokenSign(String Audience) throws JoseException {
         JwtClaims claims = new JwtClaims();
         //这里设置发放给谁，需要存入一个参数，就是上面传过来的用户名
-        claims.setAudience("Audience"); //给谁
-        claims.setExpirationTimeMinutesInTheFuture(10); //失效时间，单位分钟
+        claims.setAudience(Audience); //给谁
+        claims.setExpirationTimeMinutesInTheFuture(60); //失效时间，单位分钟
         claims.setIssuedAtToNow();  // 什么时候创建的 (now)
 
         // JWT是一个JWS和/或一个带有JSON声明的JWE作为有效负载。
@@ -81,12 +81,12 @@ public class TokenUtil {
     }
 
     //这个方法生成refreshToken
-    public static String refreshTokenSign(String Audience) throws JoseException, MalformedClaimException {
+    public static String refreshTokenSign(String Audience) throws JoseException {
         JwtClaims claims = new JwtClaims();
         //这里设置发放给谁，需要存入一个参数，就是上面传过来的用户名
 
-        claims.setAudience("Audience"); //给谁
-        claims.setExpirationTimeMinutesInTheFuture(10); //失效时间，单位分钟
+        claims.setAudience(Audience); //给谁
+        claims.setExpirationTimeMinutesInTheFuture(60); //失效时间，单位分钟
         claims.setIssuedAtToNow();  // 什么时候创建的 (now)
 
         JsonWebSignature jws = new JsonWebSignature();

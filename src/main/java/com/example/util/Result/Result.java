@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 //返回类
 @Data
-public class Result<T> implements Serializable{
+public class Result implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -35,7 +35,7 @@ public class Result<T> implements Serializable{
     /**
      * 结果对象
      */
-    private T data;
+    private Object data;
 
 
     //下面是相应的静态方法
