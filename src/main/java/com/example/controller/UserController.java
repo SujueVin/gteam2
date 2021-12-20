@@ -10,7 +10,6 @@ import com.example.pojo.UUser;
 import com.example.pojo.UserToken;
 import com.example.service.impl.TokenServiceImpl;
 import com.example.service.impl.UserServiceImpl;
-import com.example.util.CommonUtils;
 import com.example.util.HttpContextUtil;
 import com.example.util.Result.Result;
 import com.example.util.Result.ResultCode;
@@ -24,7 +23,6 @@ import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.lang.JoseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -85,7 +83,7 @@ public class UserController {
         //这里需要使用service层查询数据库内对象，然后返回
         User user = new User();
         user.setNickname("这是昵称");
-        user.setId(userid);
+        user.setUserid(userid);
 
         UserDetailDTO userDetail = new UserDetailDTO();
         userDetail.setNickname(user.getNickname());
