@@ -21,29 +21,35 @@ public class ExceptionHandle {
 
 
     /**
-     * 500 - Token
+     * 500 - Token 相关
      */
     @ExceptionHandler(InvalidJwtException.class)//jose4j错误类，不用自定义了
     public Result InvalidJwtException(InvalidJwtException e) {
         //logger.error("Token is invaild...", e);
         //通过获取jose4j错误类内部信息进行判断,返回不同的错误码
 
-        //同时需要对mongodb数据库进行操作
+
+        //能够来到这里说明token不对或者过期
+        //两种token不对都不需要对数据库进行修改，accesstoken过期也不需要对数据库修改
+        //只有在accessToken过期的时候才需要返回刷新token的提示
+        //只有在refreshToken过期的时候才需要返回重新登录的提示，并且由于mongodb自带过期时间，因此不需要自动删除
         if (e.hasExpired())
         {
             //accesstoken过期,前端需要拿refreshtoken访问refreshtoken接口
             try {
                 if ("accessTokenWebKey".equals(e.getJwtContext().getJwtClaims().getJwtId())){//查看过期类型是否是accesstoken，是就发送过期
-                    return Result.error(ResultCode.TOKEN_IS_INVAILD);
+                    return Result.error(ResultCode.TOKEN_NEED_REFRESH);
+                } else if ("refreshTokenWebKey".equals(e.getJwtContext().getJwtClaims().getJwtId())){
+                    return Result.error(ResultCode.NEED_LOGIN);
+                } else {
+                    System.out.println("Token Type wrong ___ ExceptionHandle,InvalidJwtException");
                 }
             } catch (MalformedClaimException malformedClaimException) {
                 malformedClaimException.printStackTrace();
             }
         }
-        //refreshtoken过期,前端需要直接进行登录
-        //accesstoken用户不对,前端需要直接进行登录
-        //refreshtoken用户不对,前端需要直接进行登录
-        return Result.error(ResultCode.NEED_LOGIN);
+        //其他情况，token不对
+        return Result.error(ResultCode.TOKEN_IS_INVALID);
     }
 
     /**
@@ -52,7 +58,7 @@ public class ExceptionHandle {
     @ExceptionHandler(NotFoundException.class)
     public Result notHandleException(Exception e) {
         //logger.error("Not Found Error...", e);
-        return Result.error(ResultCode.INTERFACE_NOT_exist);
+        return Result.error(ResultCode.INTERFACE_NOT_EXIST);
     }
 
 }

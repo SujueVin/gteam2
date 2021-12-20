@@ -158,6 +158,13 @@
           <version>RELEASE</version>
           <scope>compile</scope>
       </dependency>
+    <!--aop依赖类-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aspects</artifactId>
+      <version>5.2.6.RELEASE</version>
+    </dependency>
+
 
   </dependencies>
   <build>

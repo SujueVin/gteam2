@@ -1,6 +1,8 @@
 package com.example.controller;
 
 
+import com.example.pojo.UserToken;
+import com.example.service.impl.TokenServiceImpl;
 import com.example.util.HttpContextUtil;
 import com.example.util.Result.Result;
 import com.example.util.Result.ResultCode;
@@ -10,6 +12,7 @@ import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.lang.JoseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,34 +22,43 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/token")
 public class TokenController {
 
+    @Autowired
+    private TokenServiceImpl tokenService;
+
     //获取accesstoken接口
-    //参数需要：一个refreshtoken
+    //参数需要：一个refreshtoken,一个头部的userid
     @PostMapping("")
-    public Result token() throws InvalidJwtException, MalformedClaimException, JoseException {
+    public Result token() throws InvalidJwtException, JoseException, MalformedClaimException {
 
         //检验refreshtoken是否过期，是的话util类将会自动处理数据库，抛出异常
         String refreshToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.REFRESH_TOKEN_NAME);
-        TokenUtil.checkJwt(refreshToken, TokenConstant.tokenType.REFRESH_TOKEN);
+        String userid = HttpContextUtil.getHttpServletRequest().getHeader("userid");
 
-        //同时如果没有过期，和db中对应uid项的token对比，如果不是一个，返回没有权限，需要重新登录
+        //获取Jwtclaims,获取其中的userid,和传过来的username进行对比
         JwtClaims Jwtclaims=TokenUtil.getJwtClaims(refreshToken, TokenConstant.tokenType.REFRESH_TOKEN);
-        String uid=Jwtclaims.getAudience().get(0);
-        //这里使用mongodb获取uid
-        if ("11".equals(uid)){
-            //如果不是一个，将db表中对应uid项删除，返回没有权限，需要重新登录
+        String useridInToken=Jwtclaims.getAudience().get(0);
+
+
+        if (!refreshToken.equals(tokenService.findToken(useridInToken).getToken())){
+            //如果传过来的token在表中对应上不是一样的。返回token重复，需要重新登录
+            tokenService.delToken(useridInToken);
             return Result.error(ResultCode.NEED_LOGIN);
         }
-        //如果没有过期，且和uid中token一致，使用jwt生成refreshtoken和accesstoken
 
-        //需要解析token，之后获取uid，再获取token
-        String accessToken =TokenUtil.accessTokenSign(uid);
-        String newRefreshToken =TokenUtil.refreshTokenSign(uid);
+        //完成检验，进行生成新的
+        String accessToken =TokenUtil.accessTokenSign(useridInToken);
+        String newRefreshToken =TokenUtil.refreshTokenSign(useridInToken);
         String[] tokens = {"",""};
         tokens[0] = accessToken;
         tokens[1] = newRefreshToken;
 
-        //更新db中的uid项对应的token
+        //更新db中的userid项对应的token
+        UserToken userToken=new UserToken();
+        userToken.setUserid(userid);
+        userToken.setToken(newRefreshToken);
 
+        //更新
+        tokenService.changeToken(userToken);
         //完成，返回tokens
         return Result.success(tokens);
     }

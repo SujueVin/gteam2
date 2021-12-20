@@ -28,7 +28,7 @@ public class authenticationAspect {
 
         // 从 request header 中获取当前 token
         String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
-        //检验accesstoken是否过期，是的话util类将会自动抛出异常
+        //检验accesstoken是否过期,是否符合格式，不符合要求或者过期的话util类将会自动抛出异常
         TokenUtil.checkJwt(accessToken, TokenConstant.tokenType.ACCESS_TOKEN);
 
         //执行方法

@@ -2,6 +2,7 @@ package com.example.util.token;
 
 
 import org.jose4j.jwa.AlgorithmConstraints;
+import org.jose4j.jwk.PublicJsonWebKey;
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jwk.RsaJwkGenerator;
 import org.jose4j.jws.AlgorithmIdentifiers;
@@ -25,33 +26,32 @@ public class TokenUtil {
     //只生成一个ras key 同时为两个使用
     public static RsaJsonWebKey accessTokenWebKey = null;
     public static RsaJsonWebKey refreshTokenWebKey = null;
-    //内部生成ras key
-    private static void getInstance() {
+
+    //静态代码块生成ras key
+    static {
         // 生成两个RSA密钥对，用于签署和验证JWT，包装在JWK中
-        if (accessTokenWebKey == null) {
+
             try {
                 accessTokenWebKey = RsaJwkGenerator.generateJwk(2048);
                 accessTokenWebKey.setKeyId("accessTokenWebKey");
             } catch (JoseException e) {
                 e.printStackTrace();
             }
-        }
-        if (refreshTokenWebKey == null) {
             try {
                 refreshTokenWebKey = RsaJwkGenerator.generateJwk(2048);
                 refreshTokenWebKey.setKeyId("refreshTokenWebKey");
             } catch (JoseException e) {
                 e.printStackTrace();
             }
-        }
     }
 
     //这个方法生成accessToken
     public static String accessTokenSign(String Audience) throws JoseException {
         JwtClaims claims = new JwtClaims();
         //这里设置发放给谁，需要存入一个参数，就是上面传过来的用户名
-        claims.setAudience(Audience); //给谁
-        claims.setExpirationTimeMinutesInTheFuture(60); //失效时间，单位分钟
+
+        claims.setAudience(Audience,""); //给谁
+        claims.setExpirationTimeMinutesInTheFuture(TokenConstant.ACCESS_TOKEN_EXPIRES_HOUR); //失效时间，单位分钟
         claims.setIssuedAtToNow();  // 什么时候创建的 (now)
 
         // JWT是一个JWS和/或一个带有JSON声明的JWE作为有效负载。
@@ -85,8 +85,8 @@ public class TokenUtil {
         JwtClaims claims = new JwtClaims();
         //这里设置发放给谁，需要存入一个参数，就是上面传过来的用户名
 
-        claims.setAudience(Audience); //给谁
-        claims.setExpirationTimeMinutesInTheFuture(60); //失效时间，单位分钟
+        claims.setAudience(Audience,""); //给谁
+        claims.setExpirationTimeMinutesInTheFuture(TokenConstant.REFRESH_TOKEN_EXPIRES_HOUR); //失效时间，单位分钟
         claims.setIssuedAtToNow();  // 什么时候创建的 (now)
 
         JsonWebSignature jws = new JsonWebSignature();
@@ -125,9 +125,7 @@ public class TokenUtil {
 
         JwtConsumer jwtConsumer = new JwtConsumerBuilder().setRequireExpirationTime()  //JWT必须有一个有效期时间
                 .setAllowedClockSkewInSeconds(30) // 允许在验证基于时间的令牌时留有一定的余地，以计算时钟偏差。单位/秒
-                .setRequireSubject() // 主题声明
-                .setExpectedIssuer("Issuer") // JWT需要由谁来发布,用来验证 发布人
-                .setExpectedAudience("Audience") // JWT的目的是给谁, 用来验证观众
+                .setExpectedAudience("") // JWT的目的是给谁, 用来验证观众
                 .setVerificationKey(rsaJsonWebKey.getKey()) // 用公钥验证签名 ,验证秘钥
                 .setJwsAlgorithmConstraints( // 只允许在给定上下文中预期的签名算法,使用指定的算法验证
                         AlgorithmConstraints.ConstraintType.PERMIT, AlgorithmIdentifiers.RSA_USING_SHA256)
@@ -147,7 +145,8 @@ public class TokenUtil {
             //如果JWT失败的处理或验证，将会抛出InvalidJwtException。
             //System.out.println("JWT validation succeeded! " + jwtClaims);
         } catch (InvalidJwtException e) {
-            System.out.println("Invalid JWT! " + e);
+            //System.out.println("Invalid JWT! " + e);
+
             // 对JWT无效的（某些）特定原因的编程访问也是可能的
             // 在某些情况下，您是否需要不同的错误处理行为。
             // JWT是否已经过期是无效的一个常见原因
@@ -158,6 +157,8 @@ public class TokenUtil {
             if (e.hasErrorCode(ErrorCodes.AUDIENCE_INVALID)) {
                 throw e;
             }
+            //或者是其他各种错误
+            throw e;
         }
     }
 
