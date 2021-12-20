@@ -4,4 +4,7 @@
     <insert id="addUser" parameterType="com.example.po.User">
         insert into user(username,password,email,ctime,nickname) values (#{username},#{password},#{email},#{ctime},#{nickname})
     </insert>
+    <select id="findByUsername" parameterType="String" resultType="com.example.po.User">
+        select * from user where username=#{username}
+    </select>
 </mapper>

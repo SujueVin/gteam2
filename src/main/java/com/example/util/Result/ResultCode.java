@@ -4,6 +4,7 @@ package com.example.util.Result;
 public enum ResultCode {
     SUCCESS(200,"成功"),
     PARAM_IS_INVALID(201,"参数不正确"),
+    USERNAME_IS_INVALID(201,"用户名已经被注册"),
     INTERFACE_NOT_exist(404,"该接口不存在"),
     TOKEN_IS_INVAILD(500,"登录token鉴权失败"),
     NEED_LOGIN(500,"需要登录");

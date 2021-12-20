@@ -21,5 +21,7 @@ public interface IUserService  {
 
     void addUser(User user);
 
-    void delUUser(String code);
+    void delUUser(String email);
+
+    boolean findByUsername(String username);
 }

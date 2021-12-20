@@ -1,7 +1,6 @@
 package com.example.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -25,7 +24,6 @@ public class Game implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "ID")
-    @TableId(value = "gameid", type = IdType.AUTO)
     private Long gameid;
 
     @ApiModelProperty(value = "游戏名字")

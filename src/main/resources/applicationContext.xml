@@ -10,16 +10,16 @@ http://www.springframework.org/schema/context/spring-context.xsd
 http://www.springframework.org/schema/tx
 http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<import resource="classpath:config/mongo/spring-mongo.xml"></import>
-	<import resource="classpath:config/mail/spring-mail.xml"></import>
+	<import resource="classpath:config/mongo/spring-mongo.xml"/>
 	<context:component-scan base-package="com.example.service"/>
+	<context:component-scan base-package="com.example.util.mail"/>
 
     <!-- 配置数据源 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
 			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 			<property name="url" value="jdbc:mysql://localhost:3306/shop?characterEncoding=utf8" />
-			<property name="username" value="vin" />
-			<property name="password" value="430925" />
+			<property name="username" value="root" />
+			<property name="password" value="RST430925@vin" />
 			<!-- 最大连接数 -->
 			<property name="maxTotal" value="30"/>
 			<!-- 最大空闲连接数 -->

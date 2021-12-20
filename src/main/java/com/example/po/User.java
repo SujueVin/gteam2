@@ -1,13 +1,12 @@
 package com.example.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -25,7 +24,6 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户ID")
-    @TableId(value = "userid", type = IdType.AUTO)
     private Integer userid;
 
     @ApiModelProperty(value = "用户名")

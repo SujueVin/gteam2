@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 
 <table width="775" border="0" cellspacing="0" cellpadding="0" class="m-shell">
@@ -53,7 +55,7 @@
                                                                 <tbody><tr>
                                                                     <td class="btn-18 c-grey4 l-grey4 tt-u" bgcolor="#235ecf" style="font-size:18px; line-height:22px; mso-padding-alt:14px 35px; font-family:'Motiva Sans', Helvetica, Arial, sans-serif; text-align:center; border-radius:5px; letter-spacing:1px; background:linear-gradient(90deg, #3A9BED 0%, #235ECF 100%); color:#f1f1f1; text-transform:uppercase;">
                                                                         <a href="" target="_blank" class="link c-grey4" style="display: block; padding: 13px 35px; text-decoration:none; color:#f1f1f1;">
-                                                                            <span class="link c-grey4" style="text-decoration:none; color:#f1f1f1;">验证码是${code}</span>
+                                                                            <span class="link c-grey4" style="text-decoration:none; color:#f1f1f1;">验证码是<span th:text="${code}"></span></span>
                                                                         </a>
                                                                     </td>
                                                                 </tr>
@@ -206,3 +208,4 @@
 
 
 </body>
+</html>

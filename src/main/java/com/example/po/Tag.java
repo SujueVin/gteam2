@@ -1,12 +1,11 @@
 package com.example.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -24,7 +23,6 @@ public class Tag implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "标签ID")
-    @TableId(value = "tagid", type = IdType.AUTO)
     private Integer tagid;
 
     @ApiModelProperty(value = "标签名字")

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
+import java.util.Date;
 
 /**
  * @ClassName UUser
@@ -19,4 +20,5 @@ public class UUser {
     @Id
     private String email;
     private String code;
+    private Date createdTime;
 }

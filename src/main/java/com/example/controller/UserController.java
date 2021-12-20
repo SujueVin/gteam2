@@ -9,11 +9,14 @@ import com.example.util.CommonUtils;
 import com.example.util.Result.Result;
 import com.example.util.Result.ResultCode;
 import com.example.util.mail.MailUtils;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -28,13 +31,14 @@ import java.time.LocalDateTime;
 public class UserController {
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private DefaultKaptcha defaultKaptcha;
 
     //查询用户详细信息，登录后可以查询自己的信息
     //不需要返回整个user对象，只返回非隐私的数据
     @GetMapping("/detail")
     public Result getUserById(int userid){
         User user = new User();
-        user.setId(1);
         user.setUsername("666");
         //这里需要使用service层查询数据库内对象，然后返回
         if (userid==2){//能够查到，进行返回
@@ -64,34 +68,47 @@ public class UserController {
     @ApiOperation(value = "注册用户", tags = "提交表单注册用户")
     public Result register(@RequestBody RegisterParam registerParam){
         try {
+
+            String email = registerParam.getEmail();
             userService.findUUser(registerParam.getCode());
             User user = new User();
             user.setUsername(registerParam.getUsername());
             user.setPassword(registerParam.getPassword());
-            user.setEmail(registerParam.getEmail());
+            user.setEmail(email);
             user.setStat(1);
             user.setCtime(LocalDateTime.now());
-            user.setNickname(user.getEmail());
+            user.setNickname(email);
             userService.addUser(user);
+            userService.delUUser(email);
         }catch (Exception e){
             return Result.error(ResultCode.PARAM_IS_INVALID);
         }
         return Result.success();
     }
 
+    @GetMapping("/isRegister/{username}")
+    @ApiOperation(value = "判断用户名是否被注册",tags = "判断用户名是否被注册")
+    public Result checkRegister( @PathVariable String username){
+        if(userService.findByUsername(username)){
+            return Result.error(ResultCode.USERNAME_IS_INVALID);
+        }
+        return Result.success();
+    }
 
     @GetMapping("/captcha/{email}")
     @ApiOperation(value = "邮箱验证码",tags = "发送邮箱验证码")
-    public Result checkRegister(@PathVariable String email){
-        String code = "1234";
+    public Result captcha(@PathVariable String email){
+        String code = defaultKaptcha.createText();
         UUser uUser = new UUser();
         uUser.setCode(code);
         uUser.setEmail(email);
+        uUser.setCreatedTime(new Date());
         try {
             userService.addUserToMongo(uUser);
             MailUtils sendMail = new MailUtils();
             sendMail.sendMail(email,code);
         }catch (Exception e){
+            System.out.println(e);
             return Result.error(ResultCode.PARAM_IS_INVALID);
         }
         return Result.success();

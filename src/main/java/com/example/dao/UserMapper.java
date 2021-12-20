@@ -19,4 +19,6 @@ import org.springframework.stereotype.Repository;
 public interface UserMapper {
 
     public void addUser(User user);
+    //通过用户名查找user
+    User findByUsername();
 }
