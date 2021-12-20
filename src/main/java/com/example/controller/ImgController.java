@@ -2,18 +2,19 @@ package com.example.controller;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 订单表 前端控制器
+ * 游戏图片映射表 前端控制器
  * </p>
  *
  * @author su_jue
- * @since 2021-12-13
+ * @since 2021-12-19
  */
 @RestController
-@RequestMapping("/order")
-public class OrderController {
+@RequestMapping("/img")
+public class ImgController {
 
 }

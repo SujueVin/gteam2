@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 游戏表 前端控制器
+ *  前端控制器
  * </p>
  *
  * @author su_jue
  * @since 2021-12-19
  */
 @RestController
-@RequestMapping("/game")
-public class GameController {
+@RequestMapping("/shoppingcart")
+public class ShoppingcartController {
 
 }

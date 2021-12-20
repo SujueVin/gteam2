@@ -9,8 +9,8 @@ public enum ResultCode {
     TOKEN_IS_INVALID(500,"token错误"),
     TOKEN_NEED_REFRESH(500,"token需要刷新"),
     NOT_FIND(500,"请求数据无法找到"),
+    USERNAME_IS_INVALID(201,"用户名已经被注册"),
     NEED_LOGIN(500,"需要登录");
-
 
     private Integer code;
     private String message;

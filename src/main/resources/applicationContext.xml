@@ -10,8 +10,9 @@ http://www.springframework.org/schema/context/spring-context.xsd
 http://www.springframework.org/schema/tx
 http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<import resource="classpath:config/mongo/spring-mongo.xml"></import>
+	<import resource="classpath:config/mongo/spring-mongo.xml"/>
 	<context:component-scan base-package="com.example.service"/>
+	<context:component-scan base-package="com.example.util.mail"/>
 
     <!-- 配置数据源 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">

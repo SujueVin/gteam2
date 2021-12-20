@@ -5,6 +5,7 @@ import com.example.annotation.authentication;
 import com.example.dto.UserDetailDTO;
 import com.example.dto.UserMsgDTO;
 import com.example.po.User;
+import com.example.pojo.RegisterParam;
 import com.example.pojo.UUser;
 import com.example.pojo.UserToken;
 import com.example.service.impl.TokenServiceImpl;
@@ -16,15 +17,18 @@ import com.example.util.Result.ResultCode;
 import com.example.util.mail.MailUtils;
 import com.example.util.token.TokenConstant;
 import com.example.util.token.TokenUtil;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
 import io.swagger.annotations.ApiOperation;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.lang.JoseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -39,6 +43,8 @@ import java.time.LocalDateTime;
 public class UserController {
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private DefaultKaptcha defaultKaptcha;
 
     @Autowired
     private TokenServiceImpl tokenService;
@@ -156,44 +162,53 @@ public class UserController {
 
     /**
      * 注册
-     * @param user
      * @return
      */
     @PostMapping("/register")
     @ApiOperation(value = "注册用户", tags = "提交表单注册用户")
-    public Result register(@RequestBody User user){
-        user.setStat(1);
-        user.setCtime(LocalDateTime.now());
-        user.setNickname(user.getEmail());
-        UUser uUser = new UUser();
-        uUser.setUser(user);
-        uUser.setUuid(CommonUtils.getUUID());
-        System.out.println(uUser.getUuid());
+    public Result register(@RequestBody RegisterParam registerParam){
         try {
-            userService.addUserToMongo(uUser);
-            MailUtils.sendMail(user.getEmail(),uUser.getUuid());
+
+            String email = registerParam.getEmail();
+            userService.findUUser(registerParam.getCode());
+            User user = new User();
+            user.setUsername(registerParam.getUsername());
+            user.setPassword(registerParam.getPassword());
+            user.setEmail(email);
+            user.setStat(1);
+            user.setCtime(LocalDateTime.now());
+            user.setNickname(email);
+            userService.addUser(user);
+            userService.delUUser(email);
         }catch (Exception e){
             return Result.error(ResultCode.PARAM_IS_INVALID);
         }
         return Result.success();
     }
 
-    /**
-     * 邮箱激活注册
-     * @param code
-     * @return
-     */
-    @GetMapping("checkRegister/{code}")
-    @ApiOperation(value = "邮箱验证",tags = "点击按钮完成注册激活")
-    public Result checkRegister(@PathVariable String code){
-        System.out.println(code);
-        UUser uUser = userService.findUUser(code);
-        User user = uUser.getUser();
-        user.setStat(0);
+    @GetMapping("/isRegister/{username}")
+    @ApiOperation(value = "判断用户名是否被注册",tags = "判断用户名是否被注册")
+    public Result checkRegister( @PathVariable String username){
+        if(userService.findByUsername(username)){
+            return Result.error(ResultCode.USERNAME_IS_INVALID);
+        }
+        return Result.success();
+    }
+
+    @GetMapping("/captcha/{email}")
+    @ApiOperation(value = "邮箱验证码",tags = "发送邮箱验证码")
+    public Result captcha(@PathVariable String email){
+        String code = defaultKaptcha.createText();
+        UUser uUser = new UUser();
+        uUser.setCode(code);
+        uUser.setEmail(email);
+        uUser.setCreatedTime(new Date());
         try {
-            userService.addUser(user);
-            userService.delUUser(code);
+            userService.addUserToMongo(uUser);
+            MailUtils sendMail = new MailUtils();
+            sendMail.sendMail(email,code);
         }catch (Exception e){
+            System.out.println(e);
             return Result.error(ResultCode.PARAM_IS_INVALID);
         }
         return Result.success();

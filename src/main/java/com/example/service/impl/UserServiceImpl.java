@@ -47,8 +47,15 @@ public class UserServiceImpl  implements IUserService {
     }
 
     @Override
-    public void delUUser(String code) {
-        userDao.deleteById(code);
+    public void delUUser(String email) {
+        userDao.deleteById(email);
+    }
+    //通过用户名查找user
+    @Override
+    public boolean findByUsername(String username) {
+        if(userMapper.findByUsername() != null)
+            return true;
+        return false;
     }
 
 

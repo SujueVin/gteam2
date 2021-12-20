@@ -1,15 +1,14 @@
 package com.example.po;
 
+import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
-
 /**
  * <p>
- * 游戏标签表
+ * 游戏图片映射表
  * </p>
  *
  * @author su_jue
@@ -17,16 +16,16 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Tag对象", description="游戏标签表")
-public class Tag implements Serializable {
+@ApiModel(value="Img对象", description="游戏图片映射表")
+public class Img implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "标签ID")
-    private Integer tagid;
+    @ApiModelProperty(value = "游戏ID")
+    private Integer game;
 
-    @ApiModelProperty(value = "标签名字")
-    private String name;
+    @ApiModelProperty(value = "图片路径")
+    private String img;
 
 
 }

@@ -2,13 +2,12 @@ package com.example.po;
 
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 游戏种类表
+ * 游戏推荐表，人工设定
  * </p>
  *
  * @author su_jue
@@ -16,16 +15,12 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Kind对象", description="游戏种类表")
-public class Kind implements Serializable {
+@ApiModel(value="Recommend对象", description="游戏推荐表，人工设定")
+public class Recommend implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "种类ID")
-    private Integer id;
-
-    @ApiModelProperty(value = "种类名字")
-    private String name;
+    private Integer gameid;
 
 
 }
