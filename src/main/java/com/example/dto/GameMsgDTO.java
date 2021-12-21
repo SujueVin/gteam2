@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -50,6 +51,7 @@ public class GameMsgDTO implements Serializable {
     private String systemcfg;
 
     @ApiModelProperty(value = "发行时间")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime issueddate;
 
     @ApiModelProperty(value = "状态，0为未上架，1为已上架，2为已下架")

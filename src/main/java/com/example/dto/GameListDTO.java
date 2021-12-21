@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ public class GameListDTO implements Serializable {
     private Double discount;
 
     @ApiModelProperty(value = "上架时间")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime issueddate;
 
     @ApiModelProperty(value = "游戏标签名字")

@@ -17,7 +17,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
     <!-- 配置数据源 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
 			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-			<property name="url" value="jdbc:mysql://localhost:3306/shop?characterEncoding=utf8" />
+			<property name="url" value="jdbc:mysql://localhost:3306/gteam?characterEncoding=utf8" />
 			<property name="username" value="root" />
 			<property name="password" value="12345678" />
 			<!-- 最大连接数 -->

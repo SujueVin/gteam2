@@ -178,6 +178,12 @@
       <artifactId>spring-aspects</artifactId>
       <version>5.2.6.RELEASE</version>
     </dependency>
+    <!--解析日期格式类-->
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.9.2</version>
+    </dependency>
 
 
   </dependencies>

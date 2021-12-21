@@ -2,9 +2,10 @@ package com.example.util.Result;
 
 
 public enum ResultCode {
-    SUCCESS(200,"成功"),
+    SUCCESS(200,"接口访问成功"),
     PARAM_IS_INVALID(201,"参数不正确"),
     IS_NULL(201,"用户名或者密码不能为空"),
+    SUCCESS_CHANGE_PASSWORD(202,"更改密码成功请重新登录"),
     INTERFACE_NOT_EXIST(404,"该接口不存在"),
     TOKEN_IS_INVALID(500,"token错误"),
     TOKEN_NEED_REFRESH(500,"token需要刷新"),

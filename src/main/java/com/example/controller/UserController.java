@@ -3,6 +3,7 @@ package com.example.controller;
 
 import com.example.annotation.authentication;
 import com.example.dto.UserDetailDTO;
+import com.example.dto.UserDetailShowDTO;
 import com.example.dto.UserMsgDTO;
 import com.example.po.User;
 import com.example.pojo.RegisterParam;
@@ -49,59 +50,60 @@ public class UserController {
 
     //查询用户详细信息，登录后可以查询到别人的信息
     //不需要返回整个user对象，只返回非隐私的数据，返回UserMsgDTO对象
-    @GetMapping("/detail")
+    @GetMapping("/userMsg")
     @authentication
-    public Result getUserDetail(int userid){
-        User user = new User();
-        user.setNickname("这是昵称");
-        user.setUsername("别人家的孩子");
+    public Result getUserInfo(Integer userid){
 
-        UserMsgDTO userMsg = new UserMsgDTO();
+        if (userid==null){
+            return Result.error(ResultCode.PARAM_IS_INVALID);
+        }
 
-        userMsg.setNickname(user.getNickname());
-        userMsg.setIntroduction("爷是水岸");
-        userMsg.setUserimage("这图片就我！");
+        //调用usersevice获得userMsg
+        UserMsgDTO userMsg =userService.findUserMsg(userid);
 
         //这里需要使用service层查询数据库内对象，然后返回
-        if (userid==2){//能够查到，进行返回
+        if (userMsg!=null){//能够查到，进行返回
             return Result.success(userMsg);
         }
         return Result.error(ResultCode.NOT_FIND);//没有查到，返回空对象user对应的json数据
     }
 
     //查询自己本身信息，登录后才可使用,不需要鉴权，自身鉴权
-    //不需要返回整个user对象，只返回需要的，返回UserDetailDTO对象
-    @GetMapping("/mydetail")
-    public Result getUserDetail() throws InvalidJwtException, MalformedClaimException {
-
+    //不需要返回整个user对象，只返回需要的，返回UserDetailShowDTO对象
+    @GetMapping("/personal/show")
+    public Result getSelfDetail() throws InvalidJwtException, MalformedClaimException {
         // 从 request header 中获取当前 token
         String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
         //检验accesstoken是否过期,是否符合格式，不符合要求或者过期的话util类将会自动抛出异常
-        int userid=Integer.parseInt(TokenUtil.getJwtClaims(accessToken, TokenConstant.tokenType.ACCESS_TOKEN).getAudience().get(0));
 
+        int userid=Integer.parseInt(TokenUtil.getJwtClaims(accessToken, TokenConstant.tokenType.ACCESS_TOKEN).getAudience().get(0));
         //查询数据库,获取为token中对应userid的信息
         //这里需要使用service层查询数据库内对象，然后返回
-        User user = new User();
-        user.setNickname("这是昵称");
-        user.setUserid(userid);
-
-        UserDetailDTO userDetail = new UserDetailDTO();
-        userDetail.setNickname(user.getNickname());
-        userDetail.setIntroduction("这是用户简介");
-        userDetail.setUserimage("这是用户图片");
-
-        if (user != null){//如果数据库中有这个用户，返回
+        UserDetailShowDTO userDetail = userService.findMyDetail(userid);
+        if (userDetail != null){//如果数据库中有这个用户，返回
             return Result.success(userDetail);
         }
         return Result.error(ResultCode.NOT_FIND);//没有查到，返回空对象user对应的json数据
     }
 
-    //用户更新数据,只能更新自己的数据，接收userDTO对象
-    @PutMapping("/update")
-    public Result updateById(@RequestBody UserMsgDTO user) {
+    //用户更新数据,只能更新自己的数据，接收UserDetailDTO对象,需要鉴权
+    @PutMapping("/personal/change")
+    public Result updateById(@RequestBody UserDetailDTO userDetail) throws InvalidJwtException, MalformedClaimException {
+
+        // 从 request header 中获取当前 token
+        String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
+        //检验accesstoken是否过期,是否符合格式，不符合要求或者过期的话util类将会自动抛出异常
+        String userid=TokenUtil.getJwtClaims(accessToken, TokenConstant.tokenType.ACCESS_TOKEN).getAudience().get(0);
+
         //接收到数据之后,修改数据库内信息
         //直接调用server层进行数据的注入
-        //userService.upUserMsg(user);
+        userService.updateUserDetail(userDetail,Integer.parseInt(userid));
+        //如果对密码进行了更改,也就是userDetail中有密码，需要经历注销过程
+        if (!"".equals(userDetail.getPassword())||userDetail.getPassword()==null){
+            //在mongodb内消除对应的token
+            tokenService.delToken(userid);
+            return Result.success(ResultCode.SUCCESS_CHANGE_PASSWORD);
+        }
         return Result.success();
     }
 
@@ -111,16 +113,19 @@ public class UserController {
     public Result login(String userName,String password) throws JoseException {
 
         if ("".equals(userName)||"".equals(password)){
+            //如果传递的参数是空，返回空值
             return Result.error(ResultCode.IS_NULL);
         }
+
         //从数据库中获取数据，使用username查询password,同时获得userid
-        //String dbUserPassword=userService.getpassword(userName);
-        int userid=1;
+        User User = userService.findUserByUsername(userName);
+        int userid= User.getUserid();
+        String passwordInDB =User.getPassword();
         //这里进行验证密码操作，对得到的密码加盐md5处理，之后验证是否相等
-//        if (!dbUserPassword.equals(password)){
-//            //不相等，返回错误码参数不正确
-//            return Result.error(ResultCode.PARAM_IS_INVALID);
-//        }
+        if (!passwordInDB.equals(password)){
+            //不相等，返回错误码参数不正确
+            return Result.error(ResultCode.PARAM_IS_INVALID);
+        }
 
         //验证成功，进行token的产生，使用token工具类
         String accessToken = TokenUtil.accessTokenSign(Integer.toString(userid));
@@ -166,7 +171,6 @@ public class UserController {
     @ApiOperation(value = "注册用户", tags = "提交表单注册用户")
     public Result register(@RequestBody RegisterParam registerParam){
         try {
-
             String email = registerParam.getEmail();
             userService.findUUser(registerParam.getCode());
             User user = new User();
@@ -212,3 +216,4 @@ public class UserController {
         return Result.success();
     }
 }
+

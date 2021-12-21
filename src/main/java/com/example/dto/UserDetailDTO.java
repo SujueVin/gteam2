@@ -31,7 +31,11 @@ public class UserDetailDTO implements Serializable {
     @ApiModelProperty(value = "用户简介")
     private String introduction;
 
+    @ApiModelProperty(value = "密码")
+    private String password;
+
     @ApiModelProperty(value = "用户头像图片位置")
     private String userimage;
+
 
 }

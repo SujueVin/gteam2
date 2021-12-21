@@ -31,8 +31,13 @@ public class TokenServiceImpl implements ITokenService {
     @Override
     public UserToken findToken(String userid) {
         Optional<UserToken> T = tokenDao.findById(userid);
-        UserToken userToken = T.get();
-        return userToken;
+        if(T.isPresent()){
+            //如果存在，返回
+            UserToken userToken = T.get();
+            return userToken;
+        }
+        //如果不存在，返回空
+        return null;
     }
 
     @Override

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,10 +18,13 @@ import java.time.LocalDateTime;
 public class UserMsgDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+
+
     @ApiModelProperty(value = "对外展示昵称")
     private String nickname;
 
     @ApiModelProperty(value = "创建时间")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime ctime;
 
     @ApiModelProperty(value = "用户简介")

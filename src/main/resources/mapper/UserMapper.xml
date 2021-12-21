@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.UserMapper">
+
+
     <insert id="addUser" parameterType="com.example.po.User">
         insert into user(username,password,email,ctime,nickname) values (#{username},#{password},#{email},#{ctime},#{nickname})
     </insert>
-    <select id="findByUsername" parameterType="String" resultType="com.example.po.User">
+
+    <select id="findByUsername" parameterType="java.lang.String" resultType="com.example.po.User">
         select * from user where username=#{username}
     </select>
+
+    <!--按照userid寻找user-->
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.example.po.User">
+        select * from user where userid=#{userid}
+    </select>
+
+    <!--按照userid更新数据-->
+    <update id="updateUserDetail" >
+        update user set nickname=#{userDetail.nickname},phone=#{userDetail.phone},introduction=#{userDetail.introduction},password=#{userDetail.password},
+                        userimage=#{userDetail.userimage}  where userid=#{userid}
+    </update>
+
+
 </mapper>

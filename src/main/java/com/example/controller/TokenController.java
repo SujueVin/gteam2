@@ -39,8 +39,9 @@ public class TokenController {
         String useridInToken=Jwtclaims.getAudience().get(0);
 
 
-        if (!refreshToken.equals(tokenService.findToken(useridInToken).getToken())){
+        if (tokenService.findToken(useridInToken)==null||!refreshToken.equals(tokenService.findToken(useridInToken).getToken())){
             //如果传过来的token在表中对应上不是一样的。返回token重复，需要重新登录
+            //如果没有对应的token，也返回请登录
             tokenService.delToken(useridInToken);
             return Result.error(ResultCode.NEED_LOGIN);
         }
