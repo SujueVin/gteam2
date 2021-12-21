@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.OwngamesMapper">
-
+    <insert id="addGame" parameterType="com.example.po.Owngames" >
+        insert owngames set(userid,gameid,gamename,capsuleimage) values (#{game.userid},#{game.gameid},#{game.gamename},#{game.capsuleimage});
+    </insert>
+    <select id="findeOwnGamesById" parameterType="Integer" resultType="com.example.po.Owngames">
+        select * from owngames where userid=#{userid}
+    </select>
 </mapper>

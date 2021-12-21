@@ -2,4 +2,92 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.GameMapper">
 
+    <resultMap id="GameRecommendMap" type="com.example.dto.GameRecommendDTO">
+        <id property="id" column="id"/>
+        <result property="price" column="price"/>
+        <result property="discount" column="discount"/>
+        <result property="username" column="gamename"/>
+    </resultMap>
+
+    <resultMap id="GameSpecialMap" type="com.example.dto.SpecialDTO">
+        <id property="id" column="gameid"/>
+        <result property="price" column="price"/>
+        <result property="discount" column="discount"/>
+        <result property="capsuleimage" column="capsuleimage"/>
+    </resultMap>
+
+    <resultMap id="GameListMap" type="com.example.dto.GameListDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="gamename"/>
+        <result property="price" column="price"/>
+        <result property="discount" column="discount"/>
+        <result property="capsuleimage" column="capsuleimage"/>
+        <result property="issueddate" column="issueddate"/>
+    </resultMap>
+
+    <resultMap id="GameMsgMap" type="com.example.dto.GameMsgDTO">
+        <id property="id" column="gameid"/>
+        <result property="name" column="gamename"/>
+        <result property="price" column="price"/>
+        <result property="discount" column="discount"/>
+        <result property="capsuleimage" column="capsuleimage"/>
+        <result property="issueddate" column="issueddate"/>
+        <result property="creater" column="creater"/>
+        <result property="publisher" column="publisher"/>
+        <result property="gameabout" column="gameabout"/>
+        <result property="systemcfg" column="systemcfg"/>
+        <result property="stat" column="stat"/>
+        <collection property="images" column="gameid" ofType="String"
+                    javaType="List" select="findImgByGameID"/>
+    </resultMap>
+
+    <select id="getRecommendList" resultMap="GameRecommendMap">
+        select g.gameid as id,gamename,price,discount
+        from game as g,recommend as r
+        where g.gameid=r.gameid
+            limit 0,10;
+    </select>
+    <select id="findImgByGameID" resultType="String" parameterType="Integer">
+        select img
+        from img as i,game as g
+        where i.game=g.gameid and g.gameid=#{id};
+    </select>
+
+    <select id="getSpecialGame" resultMap="GameSpecialMap">
+        select gameid,price,discount,capsuleimage
+        from game
+        order by discount desc
+            limit 0,14;
+    </select>
+
+    <select id="getHotGameList" resultMap="GameListMap" parameterType="Integer">
+        select gameid as id,gamename,price,discount,issueddate,capsuleimage
+        from game
+        order by salenum desc
+            limit #{num},10;
+    </select>
+    <select id="findTagByGameID" parameterType="Integer" resultType="String">
+        select name
+        from game as g,tag as t,tagmapper as tm
+        where g.gameid=tm.gameid and t.tagid=tm.tagid and g.gameid=#{gameid};
+    </select>
+
+    <select id="getGameDetail" resultMap="GameMsgMap" parameterType="Integer">
+        select gameid,creater,publisher,gamename,price,
+               discount,gameabout,systemcfg,issueddate,stat,capsuleimage
+        from game as g
+        where g.gameid=#{id};
+    </select>
+
+    <select id="getGameByName" resultMap="GameListMap">
+        select gameid as id,gamename,price,discount,issueddate,capsuleimage
+        from game
+        where gamename like "%${gameName}%"
+    </select>
+
+    <select id="findGameById" resultType="com.example.po.Owngames" parameterType="Long">
+        select gameid,gamename,capsuleimage
+        from game
+        where gameid=#{gameid}
+    </select>
 </mapper>

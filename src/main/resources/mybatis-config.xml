@@ -9,12 +9,20 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<setting name="lazyLoadingEnabled" value="true"/>
 		<!-- 将积极加载改为按需加载 -->
 		<setting name="aggressiveLazyLoading" value="false"/>
-	</settings>
 
+		<setting name="logImpl" value="LOG4J"/>
+	</settings>
+	<plugins>
+		<plugin interceptor="com.github.pagehelper.PageInterceptor">
+
+		</plugin>
+	</plugins>
 
     <!-- 告诉 MyBatis到哪里去找映射文件 -->
 	 <mappers>
          <mapper resource="mapper/UserMapper.xml"/>
 		 <mapper resource="mapper/ShoppingcartMapper.xml"/>
+		 <mapper resource="mapper/GameMapper.xml"/>
+		 <mapper resource="mapper/OwngamesMapper.xml"/>
  	</mappers>
 </configuration>

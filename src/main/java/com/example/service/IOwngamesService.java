@@ -1,6 +1,10 @@
 package com.example.service;
 
 
+import com.example.po.Owngames;
+
+import java.util.List;
+
 /**
  * <p>
  * 用户拥有游戏表 服务类
@@ -11,4 +15,7 @@ package com.example.service;
  */
 public interface IOwngamesService {
 
+    void addGame(Long gameid, int userid);
+
+    List<Owngames> findOwnGamesById(int userid);
 }

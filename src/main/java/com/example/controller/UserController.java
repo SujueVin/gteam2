@@ -168,7 +168,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/register")
-    @ApiOperation(value = "注册用户", tags = "提交表单注册用户")
+    @ApiOperation(value = "提交表单注册用户")
     public Result register(@RequestBody RegisterParam registerParam){
         try {
             String email = registerParam.getEmail();
@@ -189,7 +189,7 @@ public class UserController {
     }
 
     @GetMapping("/isRegister/{username}")
-    @ApiOperation(value = "判断用户名是否被注册",tags = "判断用户名是否被注册")
+    @ApiOperation(value = "判断用户名是否被注册")
     public Result checkRegister( @PathVariable String username){
         if(userService.findByUsername(username)){
             return Result.error(ResultCode.USERNAME_IS_INVALID);
@@ -198,7 +198,7 @@ public class UserController {
     }
 
     @GetMapping("/captcha/{email}")
-    @ApiOperation(value = "邮箱验证码",tags = "发送邮箱验证码")
+    @ApiOperation(value = "发送邮箱验证码")
     public Result captcha(@PathVariable String email){
         String code = defaultKaptcha.createText();
         UUser uUser = new UUser();

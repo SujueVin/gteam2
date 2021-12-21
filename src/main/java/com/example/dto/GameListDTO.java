@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author: tt
@@ -39,7 +40,7 @@ public class GameListDTO implements Serializable {
     private LocalDateTime issueddate;
 
     @ApiModelProperty(value = "游戏标签名字")
-    private String tagname;
+    private List<String> tagnames;
 
     @ApiModelProperty(value = "游戏缩略图片")
     private String capsuleimage;
