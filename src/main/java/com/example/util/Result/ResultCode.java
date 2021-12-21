@@ -13,8 +13,9 @@ public enum ResultCode {
     NOT_FIND(504,"请求数据无法找到"),
     USERNAME_IS_INVALID(201,"用户名已经被注册"),
     NOT_EXISTS(404,"资源不存在"),
-    INTERFACE_NOT_exist(404,"该接口不存在"),
-    MYBATIS_EXCEPTION(501,"数据库异常");
+    MYBATIS_EXCEPTION(501,"数据库异常"),
+    HAS_EXISTED_IN_OWNGAMES(405,"游戏已经购买"),
+    HAS_EXISTED_IN_CART(405,"游戏已经在购物车内");
 
 
     private Integer code;

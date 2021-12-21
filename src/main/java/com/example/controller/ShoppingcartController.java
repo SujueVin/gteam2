@@ -112,4 +112,21 @@ public class ShoppingcartController {
         shoppingcartService.deleteAllGames(userid);
         return null;
     }
+
+    @GetMapping("checkGame/{gameid}")
+    @ApiOperation(value = "判断游戏是否被购买，或在购物车内")
+    public Result checkGame(@PathVariable Integer gameid) throws InvalidJwtException, MalformedClaimException {
+        // 从 request header 中获取当前 token
+        String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
+        //检验accesstoken是否过期,是否符合格式，不符合要求或者过期的话util类将会自动抛出异常
+        int userid=Integer.parseInt(TokenUtil.getJwtClaims(accessToken, TokenConstant.tokenType.ACCESS_TOKEN).getAudience().get(0));
+
+        if(owngamesService.findOwnGamesById(gameid) != null){
+            return Result.error(ResultCode.HAS_EXISTED_IN_OWNGAMES);
+        }
+        if(shoppingcartService.findCartByid(gameid) != null){
+            return Result.error(ResultCode.HAS_EXISTED_IN_CART);
+        }
+        return Result.success();
+    }
 }
