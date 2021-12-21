@@ -16,14 +16,12 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Shoppingcart对象", description="")
+@ApiModel(value="Shoppingcart对象", description="用于进行购物车信息传输")
 public class Shoppingcart implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
-
-    private Integer gameprice;
+    private Integer userid;
 
     private String gamename;
 

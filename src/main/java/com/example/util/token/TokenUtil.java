@@ -53,6 +53,7 @@ public class TokenUtil {
         claims.setAudience(Audience,""); //给谁
         claims.setExpirationTimeMinutesInTheFuture(TokenConstant.ACCESS_TOKEN_EXPIRES_HOUR); //失效时间，单位分钟
         claims.setIssuedAtToNow();  // 什么时候创建的 (now)
+        claims.setJwtId(accessTokenWebKey.getKeyId());
 
         // JWT是一个JWS和/或一个带有JSON声明的JWE作为有效负载。
         // 在这个例子中，它是一个JWS，所以我们创建一个JsonWebSignature对象.
@@ -88,6 +89,7 @@ public class TokenUtil {
         claims.setAudience(Audience,""); //给谁
         claims.setExpirationTimeMinutesInTheFuture(TokenConstant.REFRESH_TOKEN_EXPIRES_HOUR); //失效时间，单位分钟
         claims.setIssuedAtToNow();  // 什么时候创建的 (now)
+        claims.setJwtId(refreshTokenWebKey.getKeyId());
 
         JsonWebSignature jws = new JsonWebSignature();
 

@@ -1,6 +1,9 @@
 package com.example.service;
 
 
+import com.example.dto.CartGameDTO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,4 +15,11 @@ package com.example.service;
  */
 public interface IShoppingcartService{
 
+    List<CartGameDTO> findCartByid(int userid);
+
+    void addgame(CartGameDTO cartList, int userid);
+
+    void deletegame(Integer gameid, int userid);
+
+    void deleteAllGames(int userid);
 }

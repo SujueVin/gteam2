@@ -2,4 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.ShoppingcartMapper">
 
+    <!--删除游戏，整个用户-->
+    <delete id="deleteAllGames" parameterType="java.lang.Integer" >
+        DELETE FROM shoppingcart WHERE userid = #{userid};
+    </delete>
+
+    <!--删除单个游戏-->
+    <delete id="deleteGame"  >
+        DELETE FROM shoppingcart WHERE userid = #{userid} and gameid=#{gameid};
+    </delete>
+
+    <!--添加单个游戏-->
+    <insert id="addGame" >
+        insert into shoppingcart values (#{userid},#{cartGame.gameid},#{cartGame.gamename},#{cartGame.price},#{cartGame.discount},#{cartGame.capsuleimage});
+    </insert>
+
+    <!--返回列表-->
+    <select id="findCartById" parameterType="java.lang.Integer" resultType="com.example.dto.CartGameDTO">
+        SELECT * FROM shoppingcart WHERE userid = #{userid};
+    </select>
+
 </mapper>

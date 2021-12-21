@@ -15,5 +15,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     <!-- 告诉 MyBatis到哪里去找映射文件 -->
 	 <mappers>
          <mapper resource="mapper/UserMapper.xml"/>
+		 <mapper resource="mapper/ShoppingcartMapper.xml"/>
  	</mappers>
 </configuration>

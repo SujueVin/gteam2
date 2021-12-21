@@ -28,27 +28,13 @@ public class ExceptionHandle {
         //logger.error("Token is invaild...", e);
         //通过获取jose4j错误类内部信息进行判断,返回不同的错误码
 
-
-        //能够来到这里说明token不对或者过期
-        //两种token不对都不需要对数据库进行修改，accesstoken过期也不需要对数据库修改
-        //只有在accessToken过期的时候才需要返回刷新token的提示
-        //只有在refreshToken过期的时候才需要返回重新登录的提示，并且由于mongodb自带过期时间，因此不需要自动删除
+        //能够来到这里说明accesstoken过期
         if (e.hasExpired())
         {
             //accesstoken过期,前端需要拿refreshtoken访问refreshtoken接口
-            try {
-                if ("accessTokenWebKey".equals(e.getJwtContext().getJwtClaims().getJwtId())){//查看过期类型是否是accesstoken，是就发送过期
-                    return Result.error(ResultCode.TOKEN_NEED_REFRESH);
-                } else if ("refreshTokenWebKey".equals(e.getJwtContext().getJwtClaims().getJwtId())){
-                    return Result.error(ResultCode.NEED_LOGIN);
-                } else {
-                    System.out.println("Token Type wrong ___ ExceptionHandle,InvalidJwtException");
-                }
-            } catch (MalformedClaimException malformedClaimException) {
-                malformedClaimException.printStackTrace();
-            }
+            return Result.error(ResultCode.TOKEN_NEED_REFRESH);
         }
-        //其他情况，token不对
+        //其他情况，accesstoken不对,也需要登录
         return Result.error(ResultCode.TOKEN_IS_INVALID);
     }
 

@@ -28,20 +28,28 @@ public class TokenController {
     //获取accesstoken接口
     //参数需要：一个refreshtoken,一个头部的userid
     @PostMapping("")
-    public Result token() throws InvalidJwtException, JoseException, MalformedClaimException {
+    public Result token() throws JoseException {
 
-        //检验refreshtoken是否过期，是的话util类将会自动处理数据库，抛出异常
+        //获取头部的refreshToken
         String refreshToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.REFRESH_TOKEN_NAME);
         String userid = HttpContextUtil.getHttpServletRequest().getHeader("userid");
 
-        //获取Jwtclaims,获取其中的userid,和传过来的username进行对比
-        JwtClaims Jwtclaims=TokenUtil.getJwtClaims(refreshToken, TokenConstant.tokenType.REFRESH_TOKEN);
-        String useridInToken=Jwtclaims.getAudience().get(0);
+        String useridInToken;
+       //检验refreshTokenWebKey
+        try {
+            //获取Jwtclaims,获取其中的userid,和传过来的username进行对比
+            JwtClaims Jwtclaims=TokenUtil.getJwtClaims(refreshToken, TokenConstant.tokenType.REFRESH_TOKEN);
+            useridInToken=Jwtclaims.getAudience().get(0);
+        } catch (MalformedClaimException | InvalidJwtException malformedClaimException) {
+            //过期或者其他错误，要求重新登录
+            malformedClaimException.printStackTrace();
+            return Result.error(ResultCode.NEED_LOGIN);
+        }
 
-
+        //检验refreshtoken成功
         if (tokenService.findToken(useridInToken)==null||!refreshToken.equals(tokenService.findToken(useridInToken).getToken())){
-            //如果传过来的token在表中对应上不是一样的。返回token重复，需要重新登录
-            //如果没有对应的token，也返回请登录
+            //如果传过来的REFRESH_TOKEN在表中对应上不是一样的。返回token重复，需要重新登录
+            //如果没有对应的REFRESH_TOKEN，也返回请登录
             tokenService.delToken(useridInToken);
             return Result.error(ResultCode.NEED_LOGIN);
         }

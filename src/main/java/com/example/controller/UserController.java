@@ -70,7 +70,7 @@ public class UserController {
 
     //查询自己本身信息，登录后才可使用,不需要鉴权，自身鉴权
     //不需要返回整个user对象，只返回需要的，返回UserDetailShowDTO对象
-    @GetMapping("/personal/show")
+    @GetMapping("/personal")
     public Result getSelfDetail() throws InvalidJwtException, MalformedClaimException {
         // 从 request header 中获取当前 token
         String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     //用户更新数据,只能更新自己的数据，接收UserDetailDTO对象,需要鉴权
-    @PutMapping("/personal/change")
+    @PutMapping("/personal")
     public Result updateById(@RequestBody UserDetailDTO userDetail) throws InvalidJwtException, MalformedClaimException {
 
         // 从 request header 中获取当前 token
@@ -99,7 +99,7 @@ public class UserController {
         //直接调用server层进行数据的注入
         userService.updateUserDetail(userDetail,Integer.parseInt(userid));
         //如果对密码进行了更改,也就是userDetail中有密码，需要经历注销过程
-        if (!"".equals(userDetail.getPassword())||userDetail.getPassword()==null){
+        if (!"".equals(userDetail.getPassword())||userDetail.getPassword()!=null){
             //在mongodb内消除对应的token
             tokenService.delToken(userid);
             return Result.success(ResultCode.SUCCESS_CHANGE_PASSWORD);
@@ -146,7 +146,7 @@ public class UserController {
 
     //退出注销token
     @DeleteMapping("/signOut")
-    public Result signOut() throws JoseException, InvalidJwtException, MalformedClaimException {
+    public Result signOut() throws InvalidJwtException, MalformedClaimException {
 
         //检验refreshtoken是否过期,或者是否不对，是的话util类将会抛出异常，自动处理
         String refreshToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.REFRESH_TOKEN_NAME);

@@ -26,8 +26,10 @@ http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 	<mvc:resources location="classpath:/META-INF/resources/" mapping="doc.html"/>
 	<mvc:resources location="classpath:/META-INF/resources/webjars/" mapping="/webjars/**"/>
+	<!--配置images目录映射,将传入的img映射到文件架上 -->
+	<mvc:resources location="classpath:/image/" mapping="/gameimage/**"/>
 
- <!-- 配置视图解析器 -->
+	<!-- 配置视图解析器 -->
 <!--  	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"-->
 <!--            id="internalResourceViewResolver">-->
 <!--       &lt;!&ndash; 前缀 &ndash;&gt;-->
