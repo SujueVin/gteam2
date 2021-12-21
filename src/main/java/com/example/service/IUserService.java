@@ -40,4 +40,5 @@ public interface IUserService  {
     //此函数用于更新用户个人空间数据
     void updateUserDetail(UserDetailDTO userDetail, Integer userid);
 
+    void updateUserGameNum(int count);
 }

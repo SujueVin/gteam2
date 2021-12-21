@@ -98,7 +98,10 @@ public class UserServiceImpl  implements IUserService {
        userMapper.updateUserDetail(userDetail,userid);
     }
 
-
+    @Override
+    public void updateUserGameNum(int count) {
+        userMapper.updateUserGameNum(count);
+    }
 
 
 }

@@ -31,4 +31,6 @@ public interface IGameService  {
 
 
     PageInfo getGameByName(String gameName, Integer pageNum);
+
+    void updateGameSale(Long id);
 }

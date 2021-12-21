@@ -41,4 +41,6 @@ public interface GameMapper  {
 
 
     Owngames findGameById(Long gameid);
+
+    void updateGameSale(Long id);
 }

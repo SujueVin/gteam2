@@ -70,4 +70,9 @@ public class GameServiceImpl  implements IGameService {
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
+
+    @Override
+    public void updateGameSale(Long id) {
+        gameMapper.updateGameSale(id);
+    }
 }

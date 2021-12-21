@@ -2,8 +2,10 @@ package com.example.controller;
 
 
 import com.example.dto.CartGameDTO;
+import com.example.service.IGameService;
 import com.example.service.IOwngamesService;
 import com.example.service.IShoppingcartService;
+import com.example.service.IUserService;
 import com.example.util.HttpContextUtil;
 import com.example.util.Result.Result;
 import com.example.util.Result.ResultCode;
@@ -33,7 +35,10 @@ public class ShoppingcartController {
     private IShoppingcartService shoppingcartService;
     @Autowired
     private IOwngamesService owngamesService;
-
+    @Autowired
+    private IGameService gameService;
+    @Autowired
+    private IUserService userService;
     //获得购物车信息
     @GetMapping("")
     @ApiOperation(value = "获取购物车信息")
@@ -104,13 +109,18 @@ public class ShoppingcartController {
         //查询数据库,获取为token中对应userid的信息
         //这里需要使用service层查询数据库内对象，然后返回
         List<CartGameDTO> cartList = shoppingcartService.findCartByid(userid);
+        int count = 0;
         for (CartGameDTO game:
                 cartList) {
-            owngamesService.addGame(game.getGameid(),userid);
+            Long id = game.getGameid();
+            owngamesService.addGame(id,userid);
+            gameService.updateGameSale(id);
+            count++;
         }
+        userService.updateUserGameNum(count);
         //直接删除
         shoppingcartService.deleteAllGames(userid);
-        return null;
+        return Result.success();
     }
 
     @GetMapping("checkGame/{gameid}")

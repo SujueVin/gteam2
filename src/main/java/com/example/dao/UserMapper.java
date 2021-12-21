@@ -31,4 +31,5 @@ public interface UserMapper {
     //修改个人详细信息
     void updateUserDetail(@Param("userDetail")UserDetailDTO userDetail,@Param("userid")Integer userid);
 
+    void updateUserGameNum(int count);
 }

@@ -22,5 +22,7 @@
                         userimage=#{userDetail.userimage}  where userid=#{userid}
     </update>
 
-
+    <update id="updateUserGameNum" parameterType="Integer">
+        update user set gamenum=gamenum+#{count}
+    </update>
 </mapper>

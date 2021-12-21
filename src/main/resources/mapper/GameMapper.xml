@@ -90,4 +90,8 @@
         from game
         where gameid=#{gameid}
     </select>
+
+    <update id="updateGameSale" parameterType="Integer">
+        update game set salenum=salenum+1 where gameid=#{id}
+    </update>
 </mapper>
