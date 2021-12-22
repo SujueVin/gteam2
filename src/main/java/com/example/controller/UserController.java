@@ -51,6 +51,7 @@ public class UserController {
     //查询用户详细信息，登录后可以查询到别人的信息
     //不需要返回整个user对象，只返回非隐私的数据，返回UserMsgDTO对象
     @GetMapping("/userMsg")
+    @ApiOperation(value = "用户信息查询（可公开）")
     @authentication
     public Result getUserInfo(Integer userid){
 
@@ -71,6 +72,7 @@ public class UserController {
     //查询自己本身信息，登录后才可使用,不需要鉴权，自身鉴权
     //不需要返回整个user对象，只返回需要的，返回UserDetailShowDTO对象
     @GetMapping("/personal")
+    @ApiOperation(value = "获取个人数据")
     public Result getSelfDetail() throws InvalidJwtException, MalformedClaimException {
         // 从 request header 中获取当前 token
         String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
@@ -88,6 +90,7 @@ public class UserController {
 
     //用户更新数据,只能更新自己的数据，接收UserDetailDTO对象,需要鉴权
     @PutMapping("/personal")
+    @ApiOperation(value = "更新个人数据")
     public Result updateById(@RequestBody UserDetailDTO userDetail) throws InvalidJwtException, MalformedClaimException {
 
         // 从 request header 中获取当前 token
@@ -110,6 +113,7 @@ public class UserController {
     //登录获取token
     //参数需要：password,username，通过post加密传输保证传输信息安全
     @PostMapping("/login")
+    @ApiOperation(value = "登录")
     public Result login(String userName,String password) throws JoseException {
 
         if ("".equals(userName)||"".equals(password)){
@@ -146,6 +150,7 @@ public class UserController {
 
     //退出注销token
     @DeleteMapping("/signOut")
+    @ApiOperation(value = "退出登录")
     public Result signOut() throws InvalidJwtException, MalformedClaimException {
 
         //检验refreshtoken是否过期,或者是否不对，是的话util类将会抛出异常，自动处理

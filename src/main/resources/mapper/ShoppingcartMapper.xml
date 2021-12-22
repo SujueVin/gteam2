@@ -22,4 +22,10 @@
         SELECT * FROM shoppingcart WHERE userid = #{userid};
     </select>
 
+    <!--返回列表中单个游戏-->
+    <select id="findCartGameById"  resultType="com.example.dto.CartGameDTO">
+        SELECT * FROM shoppingcart WHERE userid = #{userid} and gameid=#{gameid};
+    </select>
+
+
 </mapper>

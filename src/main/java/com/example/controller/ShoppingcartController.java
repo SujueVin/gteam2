@@ -2,6 +2,7 @@ package com.example.controller;
 
 
 import com.example.dto.CartGameDTO;
+import com.example.po.Owngames;
 import com.example.service.IGameService;
 import com.example.service.IOwngamesService;
 import com.example.service.IShoppingcartService;
@@ -49,11 +50,11 @@ public class ShoppingcartController {
         int userid=Integer.parseInt(TokenUtil.getJwtClaims(accessToken, TokenConstant.tokenType.ACCESS_TOKEN).getAudience().get(0));
         //查询数据库,获取为token中对应userid的信息
         //这里需要使用service层查询数据库内对象，然后返回
-        List<CartGameDTO> cartList = shoppingcartService.findCartByid(userid);
+        List<CartGameDTO> cartList = shoppingcartService.findCartById(userid);
         return Result.success(cartList);
     }
 
-    //进行添加购物车操作，用于加入购物车
+    //进行添加购物车操作，用于加入购物车，注意检验是否重复
     //需要参数，用户id，cart列表类
     @PostMapping("")
     @ApiOperation(value = "添加购物车操作")
@@ -62,6 +63,13 @@ public class ShoppingcartController {
         String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
         //检验accesstoken是否过期,是否符合格式，不符合要求或者过期的话util类将会自动抛出异常
         int userid=Integer.parseInt(TokenUtil.getJwtClaims(accessToken, TokenConstant.tokenType.ACCESS_TOKEN).getAudience().get(0));
+
+        //加入前查看是否已经在购物车内
+        //如果游戏已经在购物车中，说明需要显示已经在购物车中，不能操作,同时返回重复游戏数据
+        Object gameRepeat=shoppingcartService.findCartGameById(userid,cartGame.getGameid());
+        if(gameRepeat!= null){
+            return Result.error(ResultCode.HAS_EXISTED_IN_CART,gameRepeat);
+        }
 
         //直接加入
         shoppingcartService.addgame(cartGame,userid);
@@ -106,9 +114,17 @@ public class ShoppingcartController {
         //检验accesstoken是否过期,是否符合格式，不符合要求或者过期的话util类将会自动抛出异常
         int userid=Integer.parseInt(TokenUtil.getJwtClaims(accessToken, TokenConstant.tokenType.ACCESS_TOKEN).getAudience().get(0));
 
-        //查询数据库,获取为token中对应userid的信息
-        //这里需要使用service层查询数据库内对象，然后返回
-        List<CartGameDTO> cartList = shoppingcartService.findCartByid(userid);
+        //这里需要使用service层查询数据库内购物车表单对象，然后返回，依照购物车表单进行一起加入
+        List<CartGameDTO> cartList = shoppingcartService.findCartById(userid);
+        //如果游戏已经存在库存中，说明需要显示已经在库存中，不能操作，同时返回游戏数据
+        for (CartGameDTO game:
+                cartList) {
+            Object gameRepeat=owngamesService.findOwnGameById(userid,game.getGameid());
+            if(gameRepeat!= null){
+                return Result.error(ResultCode.HAS_EXISTED_IN_OWNGAMES,gameRepeat);
+            }
+        }
+       //否则，正常加入到游戏库存中
         int count = 0;
         for (CartGameDTO game:
                 cartList) {
@@ -117,26 +133,35 @@ public class ShoppingcartController {
             gameService.updateGameSale(id);
             count++;
         }
+        //更新客户持有的游戏数目
         userService.updateUserGameNum(count);
-        //直接删除
+        //直接删除购物车表单项
         shoppingcartService.deleteAllGames(userid);
         return Result.success();
     }
 
     @GetMapping("checkGame/{gameid}")
     @ApiOperation(value = "判断游戏是否被购买，或在购物车内")
-    public Result checkGame(@PathVariable Integer gameid) throws InvalidJwtException, MalformedClaimException {
+    public Result checkGame(@PathVariable Long gameid) throws InvalidJwtException, MalformedClaimException {
+        //登录才能进行这个接口的使用
+
         // 从 request header 中获取当前 token
         String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
         //检验accesstoken是否过期,是否符合格式，不符合要求或者过期的话util类将会自动抛出异常
         int userid=Integer.parseInt(TokenUtil.getJwtClaims(accessToken, TokenConstant.tokenType.ACCESS_TOKEN).getAudience().get(0));
 
-        if(owngamesService.findOwnGamesById(gameid) != null){
-            return Result.error(ResultCode.HAS_EXISTED_IN_OWNGAMES);
+        //如果游戏已经存在库存中，说明需要显示已经在库存中，不能跳转，同时返回游戏数据
+        Object game=owngamesService.findOwnGameById(userid,gameid);
+        if(game!= null){
+            return Result.error(ResultCode.HAS_EXISTED_IN_OWNGAMES,game);
         }
-        if(shoppingcartService.findCartByid(gameid) != null){
-            return Result.error(ResultCode.HAS_EXISTED_IN_CART);
+
+        //如果游戏已经在购物车中，说明需要显示已经在购物车中，不能跳转,同时返回游戏数据
+        game=shoppingcartService.findCartGameById(userid,gameid);
+        if(game!= null){
+            return Result.error(ResultCode.HAS_EXISTED_IN_CART,game);
         }
-        return Result.success();
+
+        return Result.success("可加入购物车");
     }
 }

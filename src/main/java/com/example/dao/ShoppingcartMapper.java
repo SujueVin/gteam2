@@ -22,4 +22,6 @@ public interface ShoppingcartMapper {
     void addGame(@Param("cartGame")CartGameDTO cartGame, @Param("userid") Integer userid);
 
     List<CartGameDTO> findCartById(Integer userid);
+
+    CartGameDTO findCartGameById(@Param("userid")Integer userid,@Param("gameid") Long gameid);
 }

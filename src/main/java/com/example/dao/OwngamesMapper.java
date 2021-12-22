@@ -2,6 +2,7 @@ package com.example.dao;
 
 
 import com.example.po.Owngames;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,5 +19,9 @@ public interface OwngamesMapper{
 
     void addGame(Owngames game);
 
-    List<Owngames> findeOwnGamesById(int userid);
+    //查询游戏信息列表
+    List<Owngames> findOwnGamesById(Integer userid);
+
+    //查询单个游戏信息
+    Owngames findOwnGameById(@Param("userid")int userid,@Param("gameid") Long gameid);
 }

@@ -25,6 +25,8 @@ public class OwngamesServiceImpl implements IOwngamesService {
     @Autowired
     private GameMapper gameMapper;
 
+
+    //向游戏库存中添加游戏
     @Override
     public void addGame(Long gameId,int userId) {
         Owngames game = gameMapper.findGameById(gameId);
@@ -32,8 +34,16 @@ public class OwngamesServiceImpl implements IOwngamesService {
         owngamesMapper.addGame(game);
     }
 
+
+    //通过userid获取玩家库存列表
     @Override
     public List<Owngames> findOwnGamesById(int userid) {
-        return owngamesMapper.findeOwnGamesById(userid);
+        return owngamesMapper.findOwnGamesById(userid);
+    }
+
+    //通过userid和gameid查询游戏信息
+    @Override
+    public Owngames findOwnGameById(int userid, Long gameid) {
+        return owngamesMapper.findOwnGameById(userid,gameid);
     }
 }

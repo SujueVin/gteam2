@@ -2,6 +2,7 @@ package com.example.po;
 
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,6 +21,7 @@ public class Recommend implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "推荐游戏id")
     private Integer gameid;
 
 

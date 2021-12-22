@@ -71,6 +71,7 @@ public class GameServiceImpl  implements IGameService {
         return pageInfo;
     }
 
+    //增加游戏销量，只能加一
     @Override
     public void updateGameSale(Long id) {
         gameMapper.updateGameSale(id);

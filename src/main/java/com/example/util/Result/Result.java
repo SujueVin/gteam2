@@ -73,5 +73,17 @@ public class Result implements Serializable{
 
         return result;
     }
+    //请求失败返回，返回的错误类型从参数输入，返回的数据从参数输入
+    public static Result error(ResultCode resultCode,Object data){
+        Result result=new Result();
+
+        result.success=false;
+        result.data=data;
+        result.code=resultCode.code();
+        result.message=resultCode.message();
+
+        return result;
+    }
+
 
 }

@@ -18,4 +18,6 @@ public interface IOwngamesService {
     void addGame(Long gameid, int userid);
 
     List<Owngames> findOwnGamesById(int userid);
+
+    Owngames findOwnGameById(int userid, Long gameid);
 }

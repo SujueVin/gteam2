@@ -15,7 +15,12 @@ import java.util.List;
  */
 public interface IShoppingcartService{
 
-    List<CartGameDTO> findCartByid(int userid);
+
+    //通过userid找到玩家购物车表
+    List<CartGameDTO> findCartById(int userid);
+
+    //通过userid和gameid找到玩家购物车中是否有这个.
+    CartGameDTO findCartGameById(int userid, Long gameid);
 
     void addgame(CartGameDTO cartList, int userid);
 
