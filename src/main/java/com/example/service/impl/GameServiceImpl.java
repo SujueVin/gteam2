@@ -46,7 +46,7 @@ public class GameServiceImpl  implements IGameService {
 
     @Override
     public List<GameListDTO> getHotGameList(Integer num) {
-        List<GameListDTO> gameListDTOS = gameMapper.getHotGameList(num);
+        List<GameListDTO> gameListDTOS = gameMapper.getHotGameList(num*10);
         for (GameListDTO gameListDto :
                 gameListDTOS) {
             gameListDto.setTagnames(gameMapper.findTagByGameID(gameListDto.getId()));

@@ -12,10 +12,12 @@ public enum ResultCode {
     TOKEN_NEED_REFRESH(503,"accessToken过期,需要刷新"),
     NOT_FIND(504,"请求数据无法找到"),
     USERNAME_IS_INVALID(201,"用户名已经被注册"),
+    EMAIL_IS_INVALID(201,"邮箱已经被用于注册"),
     NOT_EXISTS(404,"资源不存在"),
     MYBATIS_EXCEPTION(501,"数据库异常"),
     HAS_EXISTED_IN_OWNGAMES(405,"游戏已经购买"),
-    HAS_EXISTED_IN_CART(405,"游戏已经在购物车内");
+    HAS_EXISTED_IN_CART(405,"游戏已经在购物车内"),
+    CODE_NOT_EXIST(404,"输入验证码不存在"),;
 
 
     private Integer code;
