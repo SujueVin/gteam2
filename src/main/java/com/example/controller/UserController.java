@@ -177,7 +177,10 @@ public class UserController {
     public Result register(@RequestBody RegisterParam registerParam){
         try {
             String email = registerParam.getEmail();
-            userService.findUUser(registerParam.getCode());
+            UUser uUser = userService.findUUser(email);
+            if(uUser.getCode()!=registerParam.getCode()){
+                return Result.error(ResultCode.CODE_NOT_EXIST);
+            }
             User user = new User();
             user.setUsername(registerParam.getUsername());
             user.setPassword(registerParam.getPassword());
@@ -193,15 +196,22 @@ public class UserController {
         return Result.success();
     }
 
-    @GetMapping("/isRegister/{username}")
+    @GetMapping("/checkUsername/{username}")
     @ApiOperation(value = "判断用户名是否被注册")
-    public Result checkRegister( @PathVariable String username){
+    public Result checkUsername( @PathVariable String username){
         if(userService.findByUsername(username)){
             return Result.error(ResultCode.USERNAME_IS_INVALID);
         }
         return Result.success();
     }
-
+    @GetMapping("/checkEmail/{email}")
+    @ApiOperation(value = "判断邮箱是否被注册")
+    public Result checkEmail( @PathVariable String email){
+        if(userService.findByEmail(email)){
+            return Result.error(ResultCode.EMAIL_IS_INVALID);
+        }
+        return Result.success();
+    }
     @GetMapping("/captcha/{email}")
     @ApiOperation(value = "发送邮箱验证码")
     public Result captcha(@PathVariable String email){

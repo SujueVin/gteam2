@@ -25,4 +25,8 @@
     <update id="updateUserGameNum" parameterType="Integer">
         update user set gamenum=gamenum+#{count}
     </update>
+
+    <select id="findByEmail" parameterType="java.lang.String" resultType="com.example.po.User">
+        select * from user where email=#{email}
+    </select>
 </mapper>

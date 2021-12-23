@@ -39,8 +39,8 @@ public class UserServiceImpl  implements IUserService {
     }
 
     @Override
-    public UUser findUUser(String uuid) {
-        Optional<UUser> U = userDao.findById(uuid);
+    public UUser findUUser(String email) {
+        Optional<UUser> U = userDao.findById(email);
         UUser uUser = U.get();
         return uUser;
     }
@@ -104,4 +104,9 @@ public class UserServiceImpl  implements IUserService {
     }
 
 
+    public boolean findByEmail(String email) {
+        if(userMapper.findByEmail(email) != null)
+            return true;
+        return false;
+    }
 }
