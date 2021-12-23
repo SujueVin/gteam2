@@ -76,8 +76,8 @@ public class UserServiceImpl  implements IUserService {
 
     //此函数用于生成展示个人信息的UsermsgDTO
     @Override
-    public UserMsgDTO findUserMsg(Integer userid) {
-        User user=findUserByUserid(userid);
+    public UserMsgDTO findUserMsg(String username) {
+        User user=userMapper.findByUsername(username);
         UserMsgDTO userMsg =new UserMsgDTO();
         BeanUtils.copyProperties(user,userMsg);
         return userMsg;

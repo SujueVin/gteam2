@@ -9,6 +9,7 @@ import com.example.po.User;
 import com.example.pojo.RegisterParam;
 import com.example.pojo.UUser;
 import com.example.pojo.UserToken;
+import com.example.service.impl.GameServiceImpl;
 import com.example.service.impl.TokenServiceImpl;
 import com.example.service.impl.UserServiceImpl;
 import com.example.util.HttpContextUtil;
@@ -53,14 +54,14 @@ public class UserController {
     @GetMapping("/userMsg")
     @ApiOperation(value = "用户信息查询（可公开）")
     @authentication
-    public Result getUserInfo(Integer userid){
+    public Result getUserInfo(String username){
 
-        if (userid==null){
+        if (!"".equals(username)){
             return Result.error(ResultCode.PARAM_IS_INVALID);
         }
 
         //调用usersevice获得userMsg
-        UserMsgDTO userMsg =userService.findUserMsg(userid);
+        UserMsgDTO userMsg =userService.findUserMsg(username);
 
         //这里需要使用service层查询数据库内对象，然后返回
         if (userMsg!=null){//能够查到，进行返回

@@ -18,7 +18,8 @@ import java.time.LocalDateTime;
 public class UserMsgDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
+    @ApiModelProperty(value = "对外展示昵称")
+    private Integer userid;
 
     @ApiModelProperty(value = "对外展示昵称")
     private String nickname;

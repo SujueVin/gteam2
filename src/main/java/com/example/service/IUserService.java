@@ -32,7 +32,7 @@ public interface IUserService  {
     User findUserByUserid(Integer userid);
 
     //此函数用于生成展示个人信息的UsermsgDTO
-    UserMsgDTO findUserMsg(Integer userid);
+    UserMsgDTO findUserMsg(String username);
 
     //此函数用于生成展示可修改个人信息的UserDetailDTO
     UserDetailShowDTO findMyDetail(Integer userid);
