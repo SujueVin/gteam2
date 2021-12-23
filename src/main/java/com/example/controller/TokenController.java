@@ -8,6 +8,7 @@ import com.example.util.Result.Result;
 import com.example.util.Result.ResultCode;
 import com.example.util.token.TokenConstant;
 import com.example.util.token.TokenUtil;
+import io.swagger.annotations.ApiOperation;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
@@ -28,6 +29,7 @@ public class TokenController {
     //获取accesstoken接口
     //参数需要：一个refreshtoken,一个头部的userid
     @PostMapping("")
+    @ApiOperation(value = "获取token令牌")
     public Result token() throws JoseException {
 
         //获取头部的refreshToken
