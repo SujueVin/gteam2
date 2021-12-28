@@ -25,7 +25,7 @@ public class GameRecommendDTO implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "推荐游戏名字")
-    private String username;
+    private String gamename;
 
     @ApiModelProperty(value = "推荐游戏价格")
     private Double price;

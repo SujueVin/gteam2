@@ -6,7 +6,7 @@
         <id property="id" column="id"/>
         <result property="price" column="price"/>
         <result property="discount" column="discount"/>
-        <result property="username" column="gamename"/>
+        <result property="gamename" column="gamename"/>
     </resultMap>
 
     <resultMap id="GameSpecialMap" type="com.example.dto.SpecialDTO">
