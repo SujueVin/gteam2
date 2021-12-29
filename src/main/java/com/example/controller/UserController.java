@@ -9,7 +9,6 @@ import com.example.po.User;
 import com.example.pojo.RegisterParam;
 import com.example.pojo.UUser;
 import com.example.pojo.UserToken;
-import com.example.service.impl.GameServiceImpl;
 import com.example.service.impl.TokenServiceImpl;
 import com.example.service.impl.UserServiceImpl;
 import com.example.util.HttpContextUtil;
@@ -79,8 +78,9 @@ public class UserController {
         String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
         //检验accesstoken是否过期,是否符合格式，不符合要求或者过期的话util类将会自动抛出异常
 
+        //获取token中对应userid的信息
         int userid=Integer.parseInt(TokenUtil.getJwtClaims(accessToken, TokenConstant.tokenType.ACCESS_TOKEN).getAudience().get(0));
-        //查询数据库,获取为token中对应userid的信息
+
         //这里需要使用service层查询数据库内对象，然后返回
         UserDetailShowDTO userDetail = userService.findMyDetail(userid);
         if (userDetail != null){//如果数据库中有这个用户，返回
