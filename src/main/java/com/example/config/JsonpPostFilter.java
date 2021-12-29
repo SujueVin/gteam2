@@ -24,7 +24,7 @@ public class JsonpPostFilter implements Filter {
         //String origin = (String) servletRequest.getRemoteHost() + ":"+ servletRequest.getRemotePort();
         //构造头部信息
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods","POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Allow-Methods","POST, GET, OPTIONS, DELETE, PUT");
         response.setHeader("Access-Control-Max-Age", "3600");
 
         //请求头允许自定义字段：Token1和Token2
