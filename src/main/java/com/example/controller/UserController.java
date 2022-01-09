@@ -92,7 +92,7 @@ public class UserController {
     //用户更新数据,只能更新自己的数据，接收UserDetailDTO对象,需要鉴权
     @PutMapping("/personal")
     @ApiOperation(value = "更新个人数据")
-    public Result updateById(@RequestBody UserDetailDTO userDetail) throws InvalidJwtException, MalformedClaimException {
+    public Result updateById(UserDetailDTO userDetail) throws InvalidJwtException, MalformedClaimException {
 
         // 从 request header 中获取当前 token
         String accessToken = HttpContextUtil.getHttpServletRequest().getHeader(TokenConstant.ACCESS_TOKEN_NAME);
@@ -175,11 +175,11 @@ public class UserController {
      */
     @PostMapping("/register")
     @ApiOperation(value = "提交表单注册用户")
-    public Result register(@RequestBody RegisterParam registerParam){
+    public Result register(RegisterParam registerParam){
         try {
             String email = registerParam.getEmail();
             UUser uUser = userService.findUUser(email);
-            if(uUser.getCode()!=registerParam.getCode()){
+            if(!uUser.getCode().equalsIgnoreCase(registerParam.getCode())){
                 return Result.error(ResultCode.CODE_NOT_EXIST);
             }
             User user = new User();

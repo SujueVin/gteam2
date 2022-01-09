@@ -5,7 +5,6 @@ import com.example.dto.GameListDTO;
 import com.example.dto.GameMsgDTO;
 import com.example.dto.GameRecommendDTO;
 import com.example.dto.SpecialDTO;
-import com.example.po.Game;
 import com.example.po.Owngames;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;

@@ -36,9 +36,8 @@
         <result property="publisher" column="publisher"/>
         <result property="gameabout" column="gameabout"/>
         <result property="systemcfg" column="systemcfg"/>
+        <result property="gameintroduction" column="gameintroduction"/>
         <result property="stat" column="stat"/>
-        <collection property="images" column="gameid" ofType="String"
-                    javaType="List" select="findImgByGameID"/>
     </resultMap>
 
     <select id="getRecommendList" resultMap="GameRecommendMap">
@@ -73,7 +72,7 @@
     </select>
 
     <select id="getGameDetail" resultMap="GameMsgMap" parameterType="Integer">
-        select gameid,creater,publisher,gamename,price,
+        select gameid,creater,publisher,gamename,price,gameintroduction,
                discount,gameabout,systemcfg,issueddate,stat,capsuleimage
         from game as g
         where g.gameid=#{id};
