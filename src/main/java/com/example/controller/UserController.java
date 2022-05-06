@@ -178,10 +178,13 @@ public class UserController {
     public Result register(@RequestBody RegisterParam registerParam){
         try {
             String email = registerParam.getEmail();
+
+            /*
             UUser uUser = userService.findUUser(email);
             if(uUser.getCode()!=registerParam.getCode()){
                 return Result.error(ResultCode.CODE_NOT_EXIST);
-            }
+            }*/
+
             User user = new User();
             user.setUsername(registerParam.getUsername());
             user.setPassword(registerParam.getPassword());
@@ -213,6 +216,9 @@ public class UserController {
         }
         return Result.success();
     }
+
+
+/*
     @GetMapping("/captcha/{email}")
     @ApiOperation(value = "发送邮箱验证码")
     public Result captcha(@PathVariable String email){
@@ -231,5 +237,6 @@ public class UserController {
         }
         return Result.success();
     }
+ */
 }
 
