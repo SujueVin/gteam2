@@ -56,7 +56,9 @@ public class GameServiceImpl  implements IGameService {
 
     @Override
     public GameMsgDTO getGameDetail(Integer gameID) {
-        return gameMapper.getGameDetail(gameID);
+        GameMsgDTO gameDetail = gameMapper.getGameDetail(gameID);
+        gameDetail.setImages(gameMapper.findImgByGameID(gameDetail.getId()));
+        return gameDetail;
     }
 
     @Override

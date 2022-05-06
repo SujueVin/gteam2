@@ -18,8 +18,7 @@
 
     <!--按照userid更新数据-->
     <update id="updateUserDetail" >
-        update user set nickname=#{userDetail.nickname},phone=#{userDetail.phone},introduction=#{userDetail.introduction},password=#{userDetail.password},
-                        userimage=#{userDetail.userimage}  where userid=#{userid}
+        update user set nickname=#{userDetail.nickname},phone=#{userDetail.phone},introduction=#{userDetail.introduction} where userid=#{userid}
     </update>
 
     <update id="updateUserGameNum" parameterType="Integer">
