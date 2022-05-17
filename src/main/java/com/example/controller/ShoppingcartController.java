@@ -116,19 +116,19 @@ public class ShoppingcartController {
 
         //这里需要使用service层查询数据库内购物车表单对象，然后返回，依照购物车表单进行一起加入
         List<CartGameDTO> cartList = shoppingcartService.findCartById(userid);
-        //如果游戏已经存在库存中，说明需要显示已经在库存中，不能操作，同时返回游戏数据
-        for (CartGameDTO game:
-                cartList) {
-            Object gameRepeat=owngamesService.findOwnGameById(userid,game.getGameid());
-            if(gameRepeat!= null){
-                return Result.error(ResultCode.HAS_EXISTED_IN_OWNGAMES,gameRepeat);
-            }
-        }
+
        //否则，正常加入到游戏库存中
         int count = 0;
         for (CartGameDTO game:
                 cartList) {
             Long id = game.getGameid();
+
+            //如果游戏已经存在库存中，则跳过
+            Object gameRepeat=owngamesService.findOwnGameById(userid,game.getGameid());
+            if(gameRepeat!= null){
+                continue;
+            }
+
             owngamesService.addGame(id,userid);
             gameService.updateGameSale(id);
             count++;
