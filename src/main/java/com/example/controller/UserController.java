@@ -143,7 +143,7 @@ public class UserController {
         UserToken userToken = new UserToken();
         userToken.setUserid(Integer.toString(userid));
         userToken.setToken(refreshToken);
-        tokenService.addTokenToMongo(userToken);
+        tokenService.changeToken(userToken);
 
         //返回tokens
         return Result.success(tokens);

@@ -53,6 +53,10 @@ public class TokenServiceImpl implements ITokenService {
             userTokenInDB.setToken(userToken.getToken());
             userTokenInDB.setUserid(userToken.getUserid());
             tokenDao.save(userTokenInDB);
+        }else{
+            addTokenToMongo(userToken);
+
         }
+
     }
 }
